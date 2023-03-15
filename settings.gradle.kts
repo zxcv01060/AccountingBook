@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "AccountingBook"
-include ':app'
+include(":app")
