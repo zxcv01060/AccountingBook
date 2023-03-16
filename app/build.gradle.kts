@@ -55,7 +55,7 @@ dependencies {
     implementation(
         project(
             mapOf(
-                "path" to ":component"
+                "path" to ":module:component"
             )
         )
     )
