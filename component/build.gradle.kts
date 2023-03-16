@@ -1,25 +1,20 @@
 import tw.idv.louislee.Version
 
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "tw.idv.louislee.accountingbook"
+    namespace = "tw.idv.louislee.component"
     compileSdk = Version.SDK
 
     defaultConfig {
-        applicationId = "tw.idv.louislee.accountingbook"
         minSdk = Version.MIN_SDK
         targetSdk = Version.SDK
-        versionCode = 1
-        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -44,25 +39,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Version.KOTLIN_COMPIER_EXTENSION
     }
-    packagingOptions {
-        resources {
-            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-        }
-    }
 }
 
 dependencies {
-    implementation(
-        project(
-            mapOf(
-                "path" to ":component"
-            )
-        )
-    )
     implementation("androidx.core:core-ktx:${Version.ANDROID_CORE}")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Version.LIFECYCLE}")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:${Version.LIFECYCLE}")
-    implementation("androidx.activity:activity-compose:${Version.ACTIVITY_COMPOSE}")
     implementation("androidx.compose.ui:ui:${Version.COMPOSE}")
     implementation("androidx.compose.ui:ui-tooling-preview:${Version.COMPOSE}")
     implementation("androidx.compose.material3:material3:${Version.MATERIAL_3}")

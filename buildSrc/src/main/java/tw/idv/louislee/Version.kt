@@ -1,6 +1,9 @@
 package tw.idv.louislee
 
 object Version {
+    const val SDK = 33
+    const val MIN_SDK = 26
+    const val KOTLIN_COMPIER_EXTENSION = "1.4.3"
     const val ANDROID_CORE = "1.9.0"
     const val ACTIVITY_COMPOSE = "1.6.1"
     const val COMPOSE = "1.3.3"
