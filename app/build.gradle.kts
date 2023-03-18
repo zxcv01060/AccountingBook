@@ -3,6 +3,7 @@ import tw.idv.louislee.Version
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -61,6 +62,10 @@ dependencies {
     implementation("androidx.compose.ui:ui:${Version.COMPOSE}")
     implementation("androidx.compose.ui:ui-tooling-preview:${Version.COMPOSE}")
     implementation("androidx.compose.material3:material3:${Version.MATERIAL_3}")
+    implementation("io.insert-koin:koin-android:${Version.KOIN}")
+    implementation("io.insert-koin:koin-androidx-compose:${Version.KOIN_ANDROID_COMPOSE}")
+    implementation("io.insert-koin:koin-annotations:${Version.KOIN_KSP}")
+    ksp("io.insert-koin:koin-ksp-compiler:${Version.KOIN_KSP}")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

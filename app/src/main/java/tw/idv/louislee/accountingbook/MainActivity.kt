@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import org.koin.androidx.compose.get
 import tw.idv.louislee.accountingbook.domain.Domain
 import tw.idv.louislee.accountingbook.ui.theme.AccountingBookTheme
 import tw.idv.louislee.component.Greeting
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val domain = Domain("Android")
+                    val domain = get<Domain>()
                     Greeting(domain.name)
                 }
             }

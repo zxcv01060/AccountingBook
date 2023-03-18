@@ -9,4 +9,7 @@ object Version {
     const val COMPOSE = "1.3.3"
     const val LIFECYCLE = "2.6.0"
     const val MATERIAL_3 = "1.1.0-alpha08"
+    const val KOIN = "3.3.3"
+    const val KOIN_KSP = "1.1.1"
+    const val KOIN_ANDROID_COMPOSE = "3.4.2"
 }
