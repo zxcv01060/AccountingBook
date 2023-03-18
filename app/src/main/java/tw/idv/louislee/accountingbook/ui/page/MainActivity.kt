@@ -1,4 +1,4 @@
-package tw.idv.louislee.accountingbook
+package tw.idv.louislee.accountingbook.ui.page
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
