@@ -1,0 +1,30 @@
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType;
+
+-- 記帳事件
+CREATE TABLE AccountingEvent (
+    -- 編號
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    -- 金額
+    price INTEGER NOT NULL,
+    -- 是否為收入(0: 支出/ 1: 收入)
+    isIncome INTEGER AS Boolean NOT NULL DEFAULT 0,
+    -- 類型
+    type INTEGER AS AccountingEventType NOT NULL,
+    -- 備註
+    note TEXT,
+    -- 建立日期
+    createDate INTEGER AS ZonedDateTime NOT NULL,
+    -- 最後更新日期
+    lastUpdateDate INTEGER AS ZonedDateTime NOT NULL
+);
+
+findAll:
+SELECT *
+FROM AccountingEvent
+ORDER BY id DESC;
+
+add:
+INSERT INTO AccountingEvent(price, isIncome, type, note, createDate, lastUpdateDate)
+VALUES (?, ?, ?, ?, ?, ?);

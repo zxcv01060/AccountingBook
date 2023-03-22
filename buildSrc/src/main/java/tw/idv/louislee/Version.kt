@@ -12,4 +12,5 @@ object Version {
     const val KOIN = "3.3.3"
     const val KOIN_KSP = "1.1.1"
     const val KOIN_ANDROID_COMPOSE = "3.4.2"
+    const val SQL_DELIGHT = "1.5.5"
 }
