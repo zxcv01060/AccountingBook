@@ -1,6 +1,5 @@
 package tw.idv.louislee.accountingbook.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -14,8 +13,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 @Composable
-fun ColorScheme.positivePrice(): Color = if (isSystemInDarkTheme()) {
-    Color(0xFF47CF4C)
-} else {
-    Color(0xFFFFFFFF)
-}
+fun ColorScheme.positivePrice() = Color(0xFF47CF4C)
+
+@Composable
+fun ColorScheme.negativePrice() = Color(0xFFE4453A)

@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +28,8 @@ import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.extension.textId
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.DarkModePreview
+import tw.idv.louislee.accountingbook.theme.negativePrice
+import tw.idv.louislee.accountingbook.theme.positivePrice
 import kotlin.math.absoluteValue
 
 class AccountingEventActivity : ComponentActivity() {
@@ -90,9 +93,9 @@ private fun AccountingEventRow(event: AccountingEventDto) {
             Text(
                 text = stringResource(id = R.string.common_price, event.price.absoluteValue),
                 color = if (event.price > 0) {
-                    Color(0xFF47CF4C)
+                    MaterialTheme.colorScheme.positivePrice()
                 } else if (event.price < 0) {
-                    Color(0xFFE4453A)
+                    MaterialTheme.colorScheme.negativePrice()
                 } else {
                     Color.Unspecified
                 }
