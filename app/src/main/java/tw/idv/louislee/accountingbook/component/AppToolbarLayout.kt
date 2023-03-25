@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
-import tw.idv.louislee.accountingbook.theme.DarkModePreview
+import tw.idv.louislee.accountingbook.theme.AppPreview
 
 @Composable
 fun AppToolbarLayout(
@@ -51,7 +51,7 @@ private fun AppToolbarLayout(
     )
 }
 
-@DarkModePreview
+@AppPreview
 @Composable
 private fun Preview() {
     AccountingBookTheme {

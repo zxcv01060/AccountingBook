@@ -27,7 +27,7 @@ import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.extension.textId
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
-import tw.idv.louislee.accountingbook.theme.DarkModePreview
+import tw.idv.louislee.accountingbook.theme.AppPreview
 import tw.idv.louislee.accountingbook.theme.negativePrice
 import tw.idv.louislee.accountingbook.theme.positivePrice
 import kotlin.math.absoluteValue
@@ -110,7 +110,7 @@ private fun AccountingEventRow(event: AccountingEventDto) {
     }
 }
 
-@DarkModePreview
+@AppPreview
 @Composable
 private fun Preview() {
     val events = listOf(
