@@ -1,4 +1,4 @@
-package tw.idv.louislee.component
+package tw.idv.louislee.accountingbook.component
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.RowScope
@@ -7,8 +7,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import tw.idv.louislee.DarkModePreview
-import tw.idv.louislee.theme.AccountingBookTheme
+import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
+import tw.idv.louislee.accountingbook.theme.DarkModePreview
 
 @Composable
 fun AppToolbarLayout(

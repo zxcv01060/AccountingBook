@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">AccountingBook</string>
+
+    <!-- 通用 -->
+    <string name="common_add">新增</string>
+    <string name="common_price">$ %1$,d</string>
+
+    <!-- 記帳紀錄 -->
+    <string name="accounting_event_list_title">錢包</string>
+    <string name="accounting_event_type_unknown">未分類</string>
+    <string name="accounting_event_type_salary">薪水</string>
+    <string name="accounting_event_type_bonus">獎金</string>
+    <string name="accounting_event_type_bill">發票</string>
+    <string name="accounting_event_type_food_or_drink">食物、飲料</string>
+    <string name="accounting_event_type_life">生活費</string>
+    <string name="accounting_event_type_traffic">交通費</string>
+    <string name="accounting_event_type_entertainment">娛樂費</string>
+    <string name="accounting_event_type_tax">税</string>
+    <string name="accounting_event_type_work">工作</string>
 </resources>

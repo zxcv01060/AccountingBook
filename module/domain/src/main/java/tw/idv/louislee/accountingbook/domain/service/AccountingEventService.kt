@@ -21,17 +21,14 @@ internal class AccountingEventServiceImpl(
     private val repository: AccountingEventRepository
 ) : AccountingEventService {
     override fun findAll(context: CoroutineContext): Flow<List<AccountingEventDto>> =
-        repository.findAll()
+        repository.findAll(context)
             .map { it.map(::eventMapper) }
 
     private fun eventMapper(event: AccountingEvent) = AccountingEventDto(
         id = event.id,
-        isIncome = event.isIncome,
         type = event.type,
         price = event.price,
-        note = event.note,
-        createDate = event.createDate,
-        lastUpdateDate = event.lastUpdateDate
+        note = event.note
     )
 
     override fun add(event: AccountingEventFormDto) = repository.add(event)

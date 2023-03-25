@@ -14,5 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "AccountingBook"
 include(":app")
-include(":module:component")
 include(":module:domain")

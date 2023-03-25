@@ -1,4 +1,4 @@
-package tw.idv.louislee.theme
+package tw.idv.louislee.accountingbook.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
