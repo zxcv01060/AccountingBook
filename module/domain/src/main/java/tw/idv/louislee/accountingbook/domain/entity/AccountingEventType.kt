@@ -59,6 +59,22 @@ enum class AccountingEventType(val isIncome: Boolean = false) {
     WORK
 }
 
+fun Array<AccountingEventType>.filter(isIncome: Boolean) = filter {
+    if (isIncome) {
+        it.isIncome
+    } else {
+        !it.isIncome
+    }
+}
+
+fun Iterable<AccountingEventType>.filter(isIncome: Boolean) = filter {
+    if (isIncome) {
+        it.isIncome
+    } else {
+        !it.isIncome
+    }
+}
+
 internal object AccountingEventTypeAdapter : ColumnAdapter<AccountingEventType, Long> {
     override fun decode(databaseValue: Long): AccountingEventType =
         AccountingEventType.values()[databaseValue.toInt()]

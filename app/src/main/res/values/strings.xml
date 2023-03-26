@@ -4,9 +4,11 @@
     <!-- 通用 -->
     <string name="common_add">新增</string>
     <string name="common_price">$ %1$,d</string>
+    <string name="common_submit">送出</string>
+    <string name="common_cancel">取消</string>
 
     <!-- 記帳紀錄 -->
-    <string name="accounting_event_list_title">錢包</string>
+    <string name="accounting_event_list_title">記帳紀錄</string>
     <string name="accounting_event_type_unknown">未分類</string>
     <string name="accounting_event_type_salary">薪水</string>
     <string name="accounting_event_type_bonus">獎金</string>
@@ -17,4 +19,10 @@
     <string name="accounting_event_type_entertainment">娛樂費</string>
     <string name="accounting_event_type_tax">税</string>
     <string name="accounting_event_type_work">工作</string>
+    <string name="accounting_event_add_title">新增記帳紀錄</string>
+    <string name="accounting_event_price">金額</string>
+    <string name="accounting_event_expenses_type">支出</string>
+    <string name="accounting_event_income_type">收入</string>
+    <string name="accounting_event_type">類型</string>
+    <string name="accounting_event_note">備註</string>
 </resources>

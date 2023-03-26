@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -25,7 +26,9 @@ import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.component.AppToolbarLayout
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
+import tw.idv.louislee.accountingbook.extension.startActivity
 import tw.idv.louislee.accountingbook.extension.textId
+import tw.idv.louislee.accountingbook.page.accountingevent.add.AddActivity
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 import tw.idv.louislee.accountingbook.theme.negativePrice
@@ -55,7 +58,9 @@ private fun Content(events: List<AccountingEventDto>) {
         AppToolbarLayout(
             title = R.string.accounting_event_list_title,
             actions = {
-                IconButton(onClick = { /*TODO*/ }) {
+                val context = LocalContext.current
+
+                IconButton(onClick = { context.startActivity<AddActivity>() }) {
                     Icon(
                         imageVector = Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.common_add)
