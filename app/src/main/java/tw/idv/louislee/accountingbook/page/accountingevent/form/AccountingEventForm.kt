@@ -36,7 +36,7 @@ fun AccountingEventForm(state: AccountingEventFormState, modifier: Modifier = Mo
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             label = { Text(text = stringResource(id = R.string.accounting_event_note)) },
-            value = state.note ?: "",
+            value = state.note,
             onValueChange = { state.note = it }
         )
     }
