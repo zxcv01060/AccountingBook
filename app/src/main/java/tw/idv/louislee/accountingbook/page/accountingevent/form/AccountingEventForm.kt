@@ -129,9 +129,11 @@ private fun TypeDropdownMenu(
 @Composable
 private fun Preview() {
     AccountingBookTheme {
-        AccountingEventForm(
-            modifier = Modifier.padding(all = 8.dp),
-            state = AccountingEventFormState()
-        )
+        Surface {
+            AccountingEventForm(
+                modifier = Modifier.padding(all = 8.dp),
+                state = AccountingEventFormState()
+            )
+        }
     }
 }
