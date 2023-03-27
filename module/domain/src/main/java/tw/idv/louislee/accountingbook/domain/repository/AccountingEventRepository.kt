@@ -30,18 +30,19 @@ internal class AccountingEventRepositoryImpl(
             .mapToList(context)
 
     override fun add(accountId: Long, event: AccountingEventFormDto) = query.transaction {
-        val accountBalance = accountQuery.findBalanceById(accountId).executeAsOne()
-        val balance = if (event.type.isIncome) {
+        val price = if (event.type.isIncome) {
             event.price
         } else {
             -event.price
-        } + accountBalance
+        }
+        val accountBalance = accountQuery.findBalanceById(accountId).executeAsOne()
+        val balance = price + accountBalance
 
         query.add(
             accountId = accountId,
             type = event.type,
             isIncome = event.type.isIncome,
-            price = event.price,
+            price = price,
             balance = balance,
             note = event.note,
             createDate = ZonedDateTime.now(Clock.systemUTC()),
