@@ -27,5 +27,6 @@ WHERE id = ?;
 
 updateBalanceById:
 UPDATE Account
-SET balance = ?
+SET balance = ?,
+    lastUpdateDate = ?
 WHERE id = ?;

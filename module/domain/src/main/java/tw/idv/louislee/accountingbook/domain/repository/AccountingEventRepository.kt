@@ -48,6 +48,10 @@ internal class AccountingEventRepositoryImpl(
             createDate = ZonedDateTime.now(Clock.systemUTC()),
             lastUpdateDate = ZonedDateTime.now(Clock.systemUTC())
         )
-        accountQuery.updateBalanceById(id = accountId, balance = balance)
+        accountQuery.updateBalanceById(
+            id = accountId,
+            balance = balance,
+            lastUpdateDate = ZonedDateTime.now(Clock.systemUTC())
+        )
     }
 }
