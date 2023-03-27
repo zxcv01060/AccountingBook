@@ -55,11 +55,23 @@ private fun TypeDropdown(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            RadioButton(selected = !isIncome, onClick = { isIncome = false })
+            RadioButton(
+                selected = !isIncome,
+                onClick = {
+                    isIncome = false
+                    onTypeSelect(AccountingEventType.UNKNOWN_EXPENSES)
+                }
+            )
             Text(text = stringResource(id = R.string.accounting_event_expenses_type))
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
-            RadioButton(selected = isIncome, onClick = { isIncome = true })
+            RadioButton(
+                selected = isIncome,
+                onClick = {
+                    isIncome = true
+                    onTypeSelect(AccountingEventType.UNKNOWN_INCOME)
+                }
+            )
             Text(text = stringResource(id = R.string.accounting_event_income_type))
         }
     }
