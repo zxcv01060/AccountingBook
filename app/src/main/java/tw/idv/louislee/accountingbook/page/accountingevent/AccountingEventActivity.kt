@@ -10,13 +10,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.getViewModel
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.component.AppToolbarLayout
+import tw.idv.louislee.accountingbook.component.PriceText
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.extension.startActivity
@@ -31,9 +30,6 @@ import tw.idv.louislee.accountingbook.extension.textId
 import tw.idv.louislee.accountingbook.page.accountingevent.add.AddActivity
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
-import tw.idv.louislee.accountingbook.theme.negativePrice
-import tw.idv.louislee.accountingbook.theme.positivePrice
-import kotlin.math.absoluteValue
 
 class AccountingEventActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,16 +91,7 @@ private fun AccountingEventRow(event: AccountingEventDto) {
         ) {
             Text(text = stringResource(id = event.type.textId))
 
-            Text(
-                text = stringResource(id = R.string.common_price, event.price.absoluteValue),
-                color = if (event.price > 0) {
-                    MaterialTheme.colorScheme.positivePrice()
-                } else if (event.price < 0) {
-                    MaterialTheme.colorScheme.negativePrice()
-                } else {
-                    Color.Unspecified
-                }
-            )
+            PriceText(price = event.price)
         }
 
         if (event.note?.isNotBlank() == true) {
