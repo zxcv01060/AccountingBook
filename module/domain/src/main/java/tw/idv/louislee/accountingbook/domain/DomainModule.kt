@@ -15,17 +15,21 @@ class DomainModule {
     fun getDatabaseSchema() = AccountingBookDatabase.Schema
 
     @Single
-    fun createDatabase(driver: SqlDriver) = AccountingBookDatabase(
-        driver,
-        AccountAdapter = Account.Adapter(
-            typeAdapter = AccountTypeAdapter(),
-            createDateAdapter = DateTimeAdapter,
-            lastUpdateDateAdapter = DateTimeAdapter
-        ),
-        AccountingEvent.Adapter(
-            typeAdapter = AccountingEventTypeAdapter,
-            createDateAdapter = DateTimeAdapter,
-            lastUpdateDateAdapter = DateTimeAdapter
+    fun createDatabase(driver: SqlDriver): AccountingBookDatabase {
+        val dateTimeAdapter = DateTimeAdapter()
+
+        return AccountingBookDatabase(
+            driver,
+            AccountAdapter = Account.Adapter(
+                typeAdapter = AccountTypeAdapter(),
+                createDateAdapter = dateTimeAdapter,
+                lastUpdateDateAdapter = dateTimeAdapter
+            ),
+            AccountingEvent.Adapter(
+                typeAdapter = AccountingEventTypeAdapter,
+                createDateAdapter = dateTimeAdapter,
+                lastUpdateDateAdapter = dateTimeAdapter
+            )
         )
-    )
+    }
 }

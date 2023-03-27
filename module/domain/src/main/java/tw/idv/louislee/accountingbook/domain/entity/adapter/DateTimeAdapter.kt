@@ -5,7 +5,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-internal object DateTimeAdapter : ColumnAdapter<ZonedDateTime, Long> {
+internal class DateTimeAdapter : ColumnAdapter<ZonedDateTime, Long> {
     override fun decode(databaseValue: Long): ZonedDateTime {
         return ZonedDateTime.ofInstant(Instant.ofEpochMilli(databaseValue), ZoneId.systemDefault())
     }
