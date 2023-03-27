@@ -9,8 +9,7 @@ import tw.idv.louislee.accountingbook.domain.dto.AccountingEventFormDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountQueries
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEvent
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventQueries
-import java.time.Clock
-import java.time.ZonedDateTime
+import tw.idv.louislee.accountingbook.domain.utils.DateTimeProvider
 import kotlin.coroutines.CoroutineContext
 
 internal interface AccountingEventRepository {
@@ -21,6 +20,7 @@ internal interface AccountingEventRepository {
 
 @Single
 internal class AccountingEventRepositoryImpl(
+    private val dateTimeProvider: DateTimeProvider,
     private val query: AccountingEventQueries,
     private val accountQuery: AccountQueries
 ) : AccountingEventRepository {
@@ -45,13 +45,13 @@ internal class AccountingEventRepositoryImpl(
             price = price,
             balance = balance,
             note = event.note,
-            createDate = ZonedDateTime.now(Clock.systemUTC()),
-            lastUpdateDate = ZonedDateTime.now(Clock.systemUTC())
+            createDate = dateTimeProvider.now,
+            lastUpdateDate = dateTimeProvider.now
         )
         accountQuery.updateBalanceById(
             id = accountId,
             balance = balance,
-            lastUpdateDate = ZonedDateTime.now(Clock.systemUTC())
+            lastUpdateDate = dateTimeProvider.now
         )
     }
 }
