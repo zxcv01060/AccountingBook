@@ -1,0 +1,31 @@
+import java.time.ZonedDateTime;
+import tw.idv.louislee.accountingbook.domain.entity.AccountType;
+
+-- 帳戶
+CREATE TABLE Account (
+    -- 編號
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    -- 名稱
+    name TEXT NOT NULL,
+    -- 類型
+    type INTEGER AS AccountType NOT NULL,
+    -- 當前餘額
+    balance INTEGER NOT NULL,
+    -- 建立日期
+    createDate INTEGER AS ZonedDateTime NOT NULL,
+    -- 最後更新日期
+    lastUpdateDate INTEGER AS ZonedDateTime NOT NULL
+);
+
+INSERT INTO Account(name, type, balance, createDate, lastUpdateDate)
+VALUES ('現金', 0, 0, DATETIME('now'), DATETIME('now'));
+
+findBalanceById:
+SELECT balance
+FROM Account
+WHERE id = ?;
+
+updateBalanceById:
+UPDATE Account
+SET balance = ?
+WHERE id = ?;

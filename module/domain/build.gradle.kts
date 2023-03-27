@@ -24,6 +24,10 @@ sqldelight {
         // tasks will not be created.
         schemaOutputDirectory = File("src/main/sqldelight/databases")
 
+        migrationOutputDirectory = File("src/main/sqldelight/migrations")
+
+        sourceFolders = listOf("sqldelight")
+
         // The dialect version you would like to target
         // Defaults to "sqlite:3.18"
         dialect = "sqlite:3.24"

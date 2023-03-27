@@ -30,7 +30,7 @@ class AddActivity : ComponentActivity() {
         setContent {
             val viewModel = getViewModel<AddViewModel>()
             Content(onSubmitClick = {
-                viewModel.add(it)
+                viewModel.add(1, it)
                 finish()
             })
         }

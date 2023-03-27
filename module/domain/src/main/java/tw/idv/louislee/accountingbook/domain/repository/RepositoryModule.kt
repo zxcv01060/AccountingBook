@@ -7,4 +7,7 @@ import tw.idv.louislee.accountingbook.domain.entity.AccountingBookDatabase
 internal class RepositoryModule {
     @Single
     fun accountingEventQuery(database: AccountingBookDatabase) = database.accountingEventQueries
+
+    @Single
+    fun accountQuery(database: AccountingBookDatabase) = database.accountQueries
 }

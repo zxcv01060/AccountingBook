@@ -7,5 +7,6 @@ import tw.idv.louislee.accountingbook.domain.service.AccountingEventService
 
 @KoinViewModel
 class AddViewModel(private val accountingEventService: AccountingEventService) : ViewModel() {
-    fun add(form: AccountingEventFormDto) = accountingEventService.add(form)
+    fun add(accountId: Long, form: AccountingEventFormDto) =
+        accountingEventService.add(accountId, form)
 }

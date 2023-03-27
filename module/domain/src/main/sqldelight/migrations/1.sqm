@@ -1,0 +1,76 @@
+import java.time.ZonedDateTime;
+import tw.idv.louislee.accountingbook.domain.entity.AccountType;
+import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType;
+
+-- ---------- 1. 新增帳戶資料表 ----------
+
+-- 帳戶
+CREATE TABLE Account (
+    -- 編號
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    -- 名稱
+    name TEXT NOT NULL,
+    -- 類型
+    type INTEGER AS AccountType NOT NULL,
+    -- 當前餘額
+    balance INTEGER NOT NULL,
+    -- 建立日期
+    createDate INTEGER AS ZonedDateTime NOT NULL,
+    -- 最後更新日期
+    lastUpdateDate INTEGER AS ZonedDateTime NOT NULL
+);
+
+INSERT INTO Account(name, type, balance, createDate, lastUpdateDate)
+VALUES (
+    '現金',
+    0,
+    IFNULL(
+        (
+            SELECT SUM(
+                CASE WHEN isIncome = 1 THEN
+                    price
+                 ELSE
+                    -price
+                 END
+            )
+            FROM AccountingEvent
+        ),
+        0
+    ),
+    DATETIME('now'),
+    DATETIME('now')
+);
+
+-- ---------- 2. 事件新增帳戶相關欄位 ----------
+
+-- 記帳事件
+CREATE TABLE AccountingEvent_temp (
+    -- 編號
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    -- 帳戶編號
+    accountId INTEGER NOT NULL,
+    -- 帳戶餘額，扣除或加上金額後的餘額
+    balance INTEGER NOT NULL,
+    -- 金額
+    price INTEGER NOT NULL,
+    -- 是否為收入(0: 支出/ 1: 收入)
+    isIncome INTEGER AS Boolean NOT NULL DEFAULT 0,
+    -- 類型
+    type INTEGER AS AccountingEventType NOT NULL,
+    -- 備註
+    note TEXT,
+    -- 建立日期
+    createDate INTEGER AS ZonedDateTime NOT NULL,
+    -- 最後更新日期
+    lastUpdateDate INTEGER AS ZonedDateTime NOT NULL,
+    FOREIGN KEY(accountId) REFERENCES Account(id)
+);
+
+INSERT INTO AccountingEvent_temp(id, accountId, balance, price, isIncome, type, note, createDate, lastUpdateDate)
+SELECT id, 1, 0, price, isIncome, type, note, createDate, lastUpdateDate
+FROM AccountingEvent;
+
+DROP TABLE AccountingEvent;
+
+ALTER TABLE AccountingEvent_temp
+RENAME TO AccountingEvent;
