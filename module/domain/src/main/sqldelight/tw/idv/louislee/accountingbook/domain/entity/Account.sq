@@ -18,7 +18,13 @@ CREATE TABLE Account (
 );
 
 INSERT INTO Account(name, type, balance, createDate, lastUpdateDate)
-VALUES ('現金', 0, 0, DATETIME('now'), DATETIME('now'));
+VALUES (
+    '現金',
+    0,
+    0,
+    strftime('%s') * 1000, -- %s只到毫秒，但ZonedDateTime精確到毫秒，因此會少三位數，要補上
+    strftime('%s') * 1000
+);
 
 findBalanceById:
 SELECT balance

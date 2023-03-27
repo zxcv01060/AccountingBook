@@ -37,8 +37,8 @@ VALUES (
         ),
         0
     ),
-    DATETIME('now'),
-    DATETIME('now')
+    strftime('%s') * 1000, -- %s只到毫秒，但ZonedDateTime精確到毫秒，因此會少三位數，要補上
+    strftime('%s') * 1000
 );
 
 -- ---------- 2. 事件新增帳戶相關欄位 ----------
