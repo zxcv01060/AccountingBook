@@ -2,7 +2,10 @@ package tw.idv.louislee.accountingbook.page.accountingevent.form
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.domain.entity.filter
-import tw.idv.louislee.accountingbook.extension.textId
 import tw.idv.louislee.accountingbook.state.AccountingEventFormState
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
@@ -64,7 +66,12 @@ private fun TypeDropdown(
             )
         }
     )
-    TypeDropdownMenu(type = type, isIncome = isIncome, onTypeSelect = onTypeSelect)
+    AccountingEventTypeDropdown(
+        type = type,
+        types = AccountingEventType.values()
+            .filter(isIncome = isIncome),
+        onTypeSelect = onTypeSelect
+    )
 }
 
 @Composable
@@ -87,52 +94,6 @@ private fun TypeRadioGroup(isIncome: Boolean, onIsIncomeChange: (isIncome: Boole
                 }
             )
             Text(text = stringResource(id = R.string.accounting_event_income_type))
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TypeDropdownMenu(
-    type: AccountingEventType,
-    isIncome: Boolean,
-    onTypeSelect: (type: AccountingEventType) -> Unit
-) {
-    var isExpanded by remember {
-        mutableStateOf(false)
-    }
-
-    ExposedDropdownMenuBox(
-        modifier = Modifier.fillMaxWidth(),
-        expanded = isExpanded,
-        onExpandedChange = {
-            isExpanded = it
-        }
-    ) {
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .menuAnchor(),
-            readOnly = true,
-            label = { Text(text = stringResource(id = R.string.accounting_event_type)) },
-            value = stringResource(id = type.textId),
-            onValueChange = {},
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) }
-        )
-
-        ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
-            val types = AccountingEventType.values()
-                .filter(isIncome = isIncome)
-            types.forEach {
-                println(it)
-                DropdownMenuItem(
-                    text = { Text(text = stringResource(id = it.textId)) },
-                    onClick = {
-                        onTypeSelect(it)
-                        isExpanded = false
-                    }
-                )
-            }
         }
     }
 }
