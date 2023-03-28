@@ -8,12 +8,15 @@ import tw.idv.louislee.accountingbook.domain.dto.AccountingEventFormDto
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
 import tw.idv.louislee.accountingbook.domain.service.AccountService
 import tw.idv.louislee.accountingbook.domain.service.AccountingEventService
+import tw.idv.louislee.accountingbook.state.AccountingEventFormState
 
 @KoinViewModel
 class AddViewModel(
     private val accountingEventService: AccountingEventService,
     private val accountService: AccountService
 ) : ViewModel() {
+    val state = AccountingEventFormState()
+
     fun add(form: AccountingEventFormDto) =
         accountingEventService.add(form)
 

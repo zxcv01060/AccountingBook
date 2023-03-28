@@ -10,7 +10,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -23,6 +22,7 @@ import tw.idv.louislee.accountingbook.domain.DomainConstant
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventFormDto
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountType
+import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.extension.finish
 import tw.idv.louislee.accountingbook.page.accountingevent.form.AccountingEventForm
 import tw.idv.louislee.accountingbook.state.AccountingEventFormState
@@ -38,6 +38,7 @@ class AddActivity : ComponentActivity() {
                 .collectAsStateWithLifecycle(initialValue = emptyList())
 
             Content(
+                state = viewModel.state,
                 accounts = accounts,
                 onSubmitClick = {
                     viewModel.add(it)
@@ -50,13 +51,13 @@ class AddActivity : ComponentActivity() {
 
 @Composable
 private fun Content(
+    state: AccountingEventFormState,
     accounts: Iterable<AccountDto>,
     onSubmitClick: (form: AccountingEventFormDto) -> Unit
 ) {
     AccountingBookTheme {
         AppToolbarLayout(title = R.string.accounting_event_add_title) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                val state = remember { AccountingEventFormState() }
                 AccountingEventForm(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     state = state,
@@ -100,7 +101,12 @@ private fun ButtonGroup(onSubmitClick: () -> Unit) {
 @Composable
 private fun Preview() {
     Content(
-        listOf(
+        state = AccountingEventFormState(
+            price = 35u,
+            type = AccountingEventType.FOOD_OR_DRINK,
+            note = "早餐"
+        ),
+        accounts = listOf(
             AccountDto(
                 id = DomainConstant.CASH_ACCOUNT_ID,
                 name = "現金",
