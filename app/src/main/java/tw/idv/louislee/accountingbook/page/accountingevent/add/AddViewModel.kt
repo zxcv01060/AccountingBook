@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.Flow
 import org.koin.android.annotation.KoinViewModel
-import tw.idv.louislee.accountingbook.domain.dto.AccountingEventFormDto
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
 import tw.idv.louislee.accountingbook.domain.service.AccountService
 import tw.idv.louislee.accountingbook.domain.service.AccountingEventService
@@ -17,8 +16,7 @@ class AddViewModel(
 ) : ViewModel() {
     val state = AccountingEventFormState()
 
-    fun add(form: AccountingEventFormDto) =
-        accountingEventService.add(form)
+    fun add() = accountingEventService.add(state.form)
 
     fun findAllAccount(): Flow<List<AccountDto>> =
         accountService.findAll(viewModelScope.coroutineContext)

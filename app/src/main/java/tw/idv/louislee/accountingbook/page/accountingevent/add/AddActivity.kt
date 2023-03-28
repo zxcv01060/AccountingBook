@@ -19,7 +19,6 @@ import org.koin.androidx.compose.getViewModel
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.component.AppToolbarLayout
 import tw.idv.louislee.accountingbook.domain.DomainConstant
-import tw.idv.louislee.accountingbook.domain.dto.AccountingEventFormDto
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountType
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
@@ -41,7 +40,7 @@ class AddActivity : ComponentActivity() {
                 state = viewModel.state,
                 accounts = accounts,
                 onSubmitClick = {
-                    viewModel.add(it)
+                    viewModel.add()
                     finish()
                 }
             )
@@ -53,7 +52,7 @@ class AddActivity : ComponentActivity() {
 private fun Content(
     state: AccountingEventFormState,
     accounts: Iterable<AccountDto>,
-    onSubmitClick: (form: AccountingEventFormDto) -> Unit
+    onSubmitClick: () -> Unit
 ) {
     AccountingBookTheme {
         AppToolbarLayout(title = R.string.accounting_event_add_title) {
@@ -64,7 +63,7 @@ private fun Content(
                     accounts = accounts
                 )
 
-                ButtonGroup(onSubmitClick = { onSubmitClick(state.form) })
+                ButtonGroup(onSubmitClick = onSubmitClick)
             }
         }
     }
