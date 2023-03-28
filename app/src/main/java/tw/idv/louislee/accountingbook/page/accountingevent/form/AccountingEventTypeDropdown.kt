@@ -43,7 +43,6 @@ fun AccountingEventTypeDropdown(
 
         ExposedDropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
             types.forEach {
-                println(it)
                 DropdownMenuItem(
                     text = { Text(text = stringResource(id = it.textId)) },
                     onClick = {
