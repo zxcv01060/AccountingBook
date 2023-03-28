@@ -51,15 +51,30 @@ private fun TypeDropdown(
         mutableStateOf(type.isIncome)
     }
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    TypeRadioGroup(
+        isIncome = isIncome,
+        onIsIncomeChange = {
+            isIncome = it
+            onTypeSelect(
+                if (it) {
+                    AccountingEventType.UNKNOWN_INCOME
+                } else {
+                    AccountingEventType.UNKNOWN_EXPENSES
+                }
+            )
+        }
+    )
+    TypeDropdownMenu(type = type, isIncome = isIncome, onTypeSelect = onTypeSelect)
+}
+
+@Composable
+private fun TypeRadioGroup(isIncome: Boolean, onIsIncomeChange: (isIncome: Boolean) -> Unit) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             RadioButton(
                 selected = !isIncome,
                 onClick = {
-                    isIncome = false
-                    onTypeSelect(AccountingEventType.UNKNOWN_EXPENSES)
+                    onIsIncomeChange(false)
                 }
             )
             Text(text = stringResource(id = R.string.accounting_event_expenses_type))
@@ -68,15 +83,12 @@ private fun TypeDropdown(
             RadioButton(
                 selected = isIncome,
                 onClick = {
-                    isIncome = true
-                    onTypeSelect(AccountingEventType.UNKNOWN_INCOME)
+                    onIsIncomeChange(true)
                 }
             )
             Text(text = stringResource(id = R.string.accounting_event_income_type))
         }
     }
-
-    TypeDropdownMenu(type = type, isIncome = isIncome, onTypeSelect = onTypeSelect)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
