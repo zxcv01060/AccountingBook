@@ -9,15 +9,20 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.getViewModel
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.component.AppToolbarLayout
+import tw.idv.louislee.accountingbook.domain.DomainConstant
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventFormDto
+import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
+import tw.idv.louislee.accountingbook.domain.entity.AccountType
 import tw.idv.louislee.accountingbook.extension.finish
 import tw.idv.louislee.accountingbook.page.accountingevent.form.AccountingEventForm
 import tw.idv.louislee.accountingbook.state.AccountingEventFormState
@@ -29,21 +34,34 @@ class AddActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val viewModel = getViewModel<AddViewModel>()
-            Content(onSubmitClick = {
-                viewModel.add(1, it)
-                finish()
-            })
+            val accounts by viewModel.findAllAccount()
+                .collectAsStateWithLifecycle(initialValue = emptyList())
+
+            Content(
+                accounts = accounts,
+                onSubmitClick = {
+                    viewModel.add(it)
+                    finish()
+                }
+            )
         }
     }
 }
 
 @Composable
-private fun Content(onSubmitClick: (form: AccountingEventFormDto) -> Unit) {
+private fun Content(
+    accounts: Iterable<AccountDto>,
+    onSubmitClick: (form: AccountingEventFormDto) -> Unit
+) {
     AccountingBookTheme {
         AppToolbarLayout(title = R.string.accounting_event_add_title) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 val state = remember { AccountingEventFormState() }
-                AccountingEventForm(modifier = Modifier.padding(horizontal = 8.dp), state = state)
+                AccountingEventForm(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    state = state,
+                    accounts = accounts
+                )
 
                 ButtonGroup(onSubmitClick = { onSubmitClick(state.form) })
             }
@@ -81,5 +99,15 @@ private fun ButtonGroup(onSubmitClick: () -> Unit) {
 @AppPreview
 @Composable
 private fun Preview() {
-    Content(onSubmitClick = {})
+    Content(
+        listOf(
+            AccountDto(
+                id = DomainConstant.CASH_ACCOUNT_ID,
+                name = "現金",
+                type = AccountType.CASH,
+                balance = 0
+            )
+        ),
+        onSubmitClick = {}
+    )
 }

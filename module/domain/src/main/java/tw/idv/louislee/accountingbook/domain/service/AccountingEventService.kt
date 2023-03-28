@@ -13,7 +13,7 @@ import kotlin.coroutines.CoroutineContext
 interface AccountingEventService {
     fun findAll(context: CoroutineContext = Dispatchers.Default): Flow<List<AccountingEventDto>>
 
-    fun add(accountId: Long, event: AccountingEventFormDto)
+    fun add(event: AccountingEventFormDto)
 }
 
 @Single
@@ -31,6 +31,6 @@ internal class AccountingEventServiceImpl(
         note = event.note
     )
 
-    override fun add(accountId: Long, event: AccountingEventFormDto) =
-        repository.add(accountId, event)
+    override fun add(event: AccountingEventFormDto) =
+        repository.add(event)
 }

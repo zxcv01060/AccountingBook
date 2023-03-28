@@ -15,7 +15,7 @@ import kotlin.coroutines.CoroutineContext
 internal interface AccountingEventRepository {
     fun findAll(context: CoroutineContext = Dispatchers.Default): Flow<List<AccountingEvent>>
 
-    fun add(accountId: Long, event: AccountingEventFormDto)
+    fun add(event: AccountingEventFormDto)
 }
 
 @Single
@@ -29,17 +29,17 @@ internal class AccountingEventRepositoryImpl(
             .asFlow()
             .mapToList(context)
 
-    override fun add(accountId: Long, event: AccountingEventFormDto) = query.transaction {
+    override fun add(event: AccountingEventFormDto) = query.transaction {
         val price = if (event.type.isIncome) {
             event.price
         } else {
             -event.price
         }
-        val accountBalance = accountQuery.findBalanceById(accountId).executeAsOne()
+        val accountBalance = accountQuery.findBalanceById(event.accountId).executeAsOne()
         val balance = price + accountBalance
 
         query.add(
-            accountId = accountId,
+            accountId = event.accountId,
             type = event.type,
             isIncome = event.type.isIncome,
             price = price,
@@ -49,7 +49,7 @@ internal class AccountingEventRepositoryImpl(
             lastUpdateDate = dateTimeProvider.now
         )
         accountQuery.updateBalanceById(
-            id = accountId,
+            id = event.accountId,
             balance = balance,
             lastUpdateDate = dateTimeProvider.now
         )

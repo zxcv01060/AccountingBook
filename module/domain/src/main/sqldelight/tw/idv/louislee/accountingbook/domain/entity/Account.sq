@@ -26,6 +26,10 @@ VALUES (
     strftime('%s') * 1000
 );
 
+findAll:
+SELECT *
+FROM Account;
+
 findBalanceById:
 SELECT balance
 FROM Account

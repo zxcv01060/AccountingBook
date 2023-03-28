@@ -13,6 +13,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import tw.idv.louislee.accountingbook.R
+import tw.idv.louislee.accountingbook.domain.DomainConstant
+import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
+import tw.idv.louislee.accountingbook.domain.entity.AccountType
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.domain.entity.filter
 import tw.idv.louislee.accountingbook.state.AccountingEventFormState
@@ -20,7 +23,11 @@ import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 
 @Composable
-fun AccountingEventForm(state: AccountingEventFormState, modifier: Modifier = Modifier) {
+fun AccountingEventForm(
+    state: AccountingEventFormState,
+    accounts: Iterable<AccountDto>,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = Modifier.fillMaxWidth() then modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -34,6 +41,12 @@ fun AccountingEventForm(state: AccountingEventFormState, modifier: Modifier = Mo
         )
 
         TypeDropdown(type = state.type, onTypeSelect = { state.type = it })
+
+        AccountDropdown(
+            id = state.accountId,
+            accounts = accounts,
+            onAccountSelect = { state.accountId = it.id }
+        )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -105,7 +118,15 @@ private fun Preview() {
         Surface {
             AccountingEventForm(
                 modifier = Modifier.padding(all = 8.dp),
-                state = AccountingEventFormState()
+                state = AccountingEventFormState(),
+                accounts = listOf(
+                    AccountDto(
+                        id = DomainConstant.CASH_ACCOUNT_ID,
+                        name = "現金",
+                        type = AccountType.CASH,
+                        balance = 500
+                    )
+                )
             )
         }
     }
