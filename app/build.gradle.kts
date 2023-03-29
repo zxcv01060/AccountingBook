@@ -66,6 +66,7 @@ dependencies {
     implementation("io.insert-koin:koin-annotations:${Version.KOIN_KSP}")
     ksp("io.insert-koin:koin-ksp-compiler:${Version.KOIN_KSP}")
     implementation("com.squareup.sqldelight:android-driver:${Version.SQL_DELIGHT}")
+    implementation("androidx.navigation:navigation-compose:${Version.NAV}")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

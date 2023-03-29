@@ -17,4 +17,6 @@ object Version {
     const val KOIN_ANDROID_COMPOSE = "3.4.2"
 
     const val SQL_DELIGHT = "1.5.5"
+
+    const val NAV = "2.5.3"
 }

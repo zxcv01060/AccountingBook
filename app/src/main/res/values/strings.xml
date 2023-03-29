@@ -8,6 +8,7 @@
     <string name="common_cancel">取消</string>
 
     <!-- 記帳紀錄 -->
+    <string name="accounting_event_screen_title">記帳</string>
     <string name="accounting_event_list_title">記帳紀錄</string>
     <string name="accounting_event_type_unknown">未分類</string>
     <string name="accounting_event_type_salary">薪水</string>

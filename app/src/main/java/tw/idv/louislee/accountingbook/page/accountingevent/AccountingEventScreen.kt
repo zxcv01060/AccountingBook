@@ -1,8 +1,5 @@
 package tw.idv.louislee.accountingbook.page.accountingevent
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,25 +28,20 @@ import tw.idv.louislee.accountingbook.page.accountingevent.add.AddActivity
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 
-class AccountingEventActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            val viewModel = getViewModel<AccountingEventViewModelImpl>()
-            val coroutineScope = rememberCoroutineScope()
-            val events by viewModel.findAll()
-                .collectAsStateWithLifecycle(
-                    initialValue = emptyList(),
-                    context = coroutineScope.coroutineContext
-                )
+@Composable
+fun AccountingEventScreen(viewModel: AccountingEventViewModel = getViewModel()) {
+    val coroutineScope = rememberCoroutineScope()
+    val events by viewModel.findAll()
+        .collectAsStateWithLifecycle(
+            initialValue = emptyList(),
+            context = coroutineScope.coroutineContext
+        )
 
-            Content(events = events)
-        }
-    }
+    AccountingEventScreen(events = events)
 }
 
 @Composable
-private fun Content(events: List<AccountingEventDto>) {
+fun AccountingEventScreen(events: List<AccountingEventDto>) {
     AccountingBookTheme {
         AppToolbarLayout(
             title = R.string.accounting_event_list_title,
@@ -119,5 +111,5 @@ private fun Preview() {
         )
     )
 
-    Content(events = events)
+    AccountingEventScreen(events = events)
 }
