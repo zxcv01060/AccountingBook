@@ -1,6 +1,8 @@
 package tw.idv.louislee.accountingbook
 
 import androidx.annotation.StringRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
@@ -20,5 +22,15 @@ enum class AppScreen(
             )
         },
         labelId = R.string.accounting_event_screen_title
+    ),
+    ACCOUNT(
+        route = "Account",
+        icon = {
+            Icon(
+                imageVector = Icons.Filled.AccountBox,
+                contentDescription = stringResource(id = R.string.account_screen_title)
+            )
+        },
+        labelId = R.string.account_screen_title
     );
 }

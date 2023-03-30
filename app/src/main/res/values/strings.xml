@@ -28,4 +28,11 @@
     <string name="accounting_event_account">帳戶</string>
     <string name="accounting_event_balance">餘額：%1$s</string>
     <string name="accounting_event_note">備註</string>
+
+    <!-- 帳戶 -->
+    <string name="account_list_title">帳戶</string>
+    <string name="account_screen_title">帳戶</string>
+    <string name="account_type_cash">現金</string>
+    <string name="account_type_bank">銀行</string>
+    <string name="account_type_credit_card">信用卡(含簽帳金融卡)</string>
 </resources>

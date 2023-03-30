@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
@@ -15,7 +16,7 @@ import tw.idv.louislee.accountingbook.theme.positivePrice
 import kotlin.math.absoluteValue
 
 @Composable
-fun PriceText(price: Long, modifier: Modifier = Modifier) {
+fun PriceText(price: Long, modifier: Modifier = Modifier, align: TextAlign = TextAlign.Start) {
     Text(
         modifier = modifier,
         text = stringResource(id = R.string.common_price, price.absoluteValue),
@@ -25,7 +26,8 @@ fun PriceText(price: Long, modifier: Modifier = Modifier) {
             MaterialTheme.colorScheme.negativePrice()
         } else {
             Color.Unspecified
-        }
+        },
+        textAlign = align
     )
 }
 

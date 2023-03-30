@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import tw.idv.louislee.accountingbook.AppScreen
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
+import tw.idv.louislee.accountingbook.page.account.AccountScreen
 import tw.idv.louislee.accountingbook.page.accountingevent.AccountingEventScreen
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
@@ -28,14 +29,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Content(
-                accountingEventScreen = { AccountingEventScreen() }
+                accountingEventScreen = { AccountingEventScreen() },
+                accountScreen = { AccountScreen() }
             )
         }
     }
 }
 
 @Composable
-private fun Content(accountingEventScreen: @Composable () -> Unit) {
+private fun Content(
+    accountingEventScreen: @Composable () -> Unit,
+    accountScreen: @Composable () -> Unit
+) {
     AccountingBookTheme {
         Surface {
             val controller = rememberNavController()
@@ -44,7 +49,8 @@ private fun Content(accountingEventScreen: @Composable () -> Unit) {
                 NavigationContainer(
                     modifier = Modifier.padding(it),
                     controller = controller,
-                    accountingEventScreen = accountingEventScreen
+                    accountingEventScreen = accountingEventScreen,
+                    accountScreen = accountScreen
                 )
             }
         }
@@ -86,7 +92,8 @@ private fun AppBottomBar(controller: NavHostController) {
 private fun NavigationContainer(
     modifier: Modifier,
     controller: NavHostController,
-    accountingEventScreen: @Composable () -> Unit
+    accountingEventScreen: @Composable () -> Unit,
+    accountScreen: @Composable () -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -94,6 +101,7 @@ private fun NavigationContainer(
         startDestination = AppScreen.ACCOUNTING_EVENT.route
     ) {
         composable(route = AppScreen.ACCOUNTING_EVENT.route) { accountingEventScreen() }
+        composable(route = AppScreen.ACCOUNT.route) { accountScreen() }
     }
 }
 
@@ -123,6 +131,7 @@ private fun Preview() {
                     )
                 )
             )
-        }
+        },
+        accountScreen = {}
     )
 }
