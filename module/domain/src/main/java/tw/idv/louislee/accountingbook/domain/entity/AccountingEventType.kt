@@ -29,6 +29,11 @@ enum class AccountingEventType(val isIncome: Boolean = false) {
     BILL(isIncome = true),
 
     /**
+     * 存款
+     */
+    SAVE_MONEY(isIncome = true),
+
+    /**
      * 食物、飲料
      */
     FOOD_OR_DRINK,

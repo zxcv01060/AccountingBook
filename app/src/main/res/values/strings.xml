@@ -26,6 +26,7 @@
     <string name="accounting_event_type_salary">薪水</string>
     <string name="accounting_event_type_bonus">獎金</string>
     <string name="accounting_event_type_bill">發票</string>
+    <string name="accounting_event_type_save_money">存款</string>
     <string name="accounting_event_type_food_or_drink">食物、飲料</string>
     <string name="accounting_event_type_life">生活費</string>
     <string name="accounting_event_type_traffic">交通費</string>

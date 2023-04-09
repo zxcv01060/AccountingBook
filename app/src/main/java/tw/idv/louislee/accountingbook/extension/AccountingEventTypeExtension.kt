@@ -12,6 +12,7 @@ val AccountingEventType.textId: Int
         SALARY -> R.string.accounting_event_type_salary
         BONUS -> R.string.accounting_event_type_bonus
         BILL -> R.string.accounting_event_type_bill
+        SAVE_MONEY -> R.string.accounting_event_type_save_money
         FOOD_OR_DRINK -> R.string.accounting_event_type_food_or_drink
         LIFE -> R.string.accounting_event_type_life
         TRAFFIC -> R.string.accounting_event_type_traffic
