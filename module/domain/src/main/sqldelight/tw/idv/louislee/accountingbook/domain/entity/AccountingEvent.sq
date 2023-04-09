@@ -46,3 +46,13 @@ VALUES (
     :createDate,
     :lastUpdateDate
 );
+
+deleteById:
+DELETE FROM AccountingEvent
+WHERE id = ?;
+
+plusBalanceByIdGreaterThan:
+UPDATE AccountingEvent
+SET balance = balance + :price,
+    lastUpdateDate = :lastUpdateDate
+WHERE id > :id;

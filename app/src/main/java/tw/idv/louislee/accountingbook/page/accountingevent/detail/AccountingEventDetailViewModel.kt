@@ -7,4 +7,6 @@ import tw.idv.louislee.accountingbook.domain.service.AccountingEventService
 @KoinViewModel
 class AccountingEventDetailViewModel(private val service: AccountingEventService) : ViewModel() {
     fun findById(id: Long) = service.findById(id = id)
+
+    fun delete(id: Long) = service.delete(id = id)
 }

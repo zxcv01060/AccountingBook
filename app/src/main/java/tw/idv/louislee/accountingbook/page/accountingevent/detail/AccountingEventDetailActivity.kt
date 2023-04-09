@@ -6,11 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -48,8 +47,17 @@ class AccountingEventDetailActivity : ComponentActivity() {
             val viewModel = getViewModel<AccountingEventDetailViewModel>()
             val event by viewModel.findById(id = id)
                 .collectAsStateWithLifecycle(initialValue = AccountingEventDetailDto.placeholder)
+            val context = LocalContext.current
 
-            Content(id = id, event = event)
+            Content(
+                id = id,
+                event = event,
+                onEditClick = { },
+                onDeleteConfirm = {
+                    viewModel.delete(id)
+                    context.finish()
+                }
+            )
         }
     }
 }
@@ -58,18 +66,64 @@ class AccountingEventDetailActivity : ComponentActivity() {
 private fun Content(
     id: Long,
     event: AccountingEventDetailDto?,
-    dateFormatter: AppDateFormatter = get()
+    dateFormatter: AppDateFormatter = get(),
+    onEditClick: () -> Unit = {},
+    onDeleteConfirm: () -> Unit = {}
 ) {
     val context = LocalContext.current
+    var isShowingDeleteConfirmDialog by remember {
+        mutableStateOf(false)
+    }
 
     AccountingBookTheme {
         AppToolbarLayout(
             onNavigateBack = context::finish,
-            title = R.string.accounting_event_detail_title
+            title = R.string.accounting_event_detail_title,
+            actions = {
+                IconButton(onClick = { isShowingDeleteConfirmDialog = true }) {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = stringResource(id = R.string.common_delete)
+                    )
+                }
+            }
         ) {
+            if (isShowingDeleteConfirmDialog) {
+                DeleteConfirmDialog(
+                    onDismissRequest = { isShowingDeleteConfirmDialog = false },
+                    onConfirm = onDeleteConfirm
+                )
+            }
+
             AccountingEventDetail(id = id, event = event, dateFormatter = dateFormatter)
         }
     }
+}
+
+@Composable
+private fun DeleteConfirmDialog(
+    onConfirm: () -> Unit,
+    onDismissRequest: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = {
+            Text(text = stringResource(id = R.string.accounting_event_detail_delete_title))
+        },
+        text = {
+            Text(text = stringResource(id = R.string.accounting_event_detail_delete_message))
+        },
+        confirmButton = {
+            Button(onClick = onConfirm) {
+                Text(text = stringResource(id = R.string.common_ok))
+            }
+        },
+        dismissButton = {
+            Button(onClick = onConfirm) {
+                Text(text = stringResource(id = R.string.common_cancel))
+            }
+        }
+    )
 }
 
 @Composable

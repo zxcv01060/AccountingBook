@@ -21,6 +21,8 @@ interface AccountingEventService {
     ): Flow<AccountingEventDetailDto?>
 
     fun add(event: AccountingEventFormDto)
+
+    fun delete(id: Long)
 }
 
 @Single
@@ -44,4 +46,6 @@ internal class AccountingEventServiceImpl(
 
     override fun add(event: AccountingEventFormDto) =
         repository.add(event)
+
+    override fun delete(id: Long) = repository.delete(id = id)
 }

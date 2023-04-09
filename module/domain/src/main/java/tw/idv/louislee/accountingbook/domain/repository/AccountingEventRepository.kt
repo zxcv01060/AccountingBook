@@ -19,6 +19,8 @@ internal interface AccountingEventRepository {
     fun findById(id: Long, context: CoroutineContext = Dispatchers.Default): Flow<AccountingEvent?>
 
     fun add(event: AccountingEventFormDto)
+
+    fun delete(id: Long)
 }
 
 @Single
@@ -43,23 +45,46 @@ internal class AccountingEventRepositoryImpl(
         } else {
             -event.price
         }
-        val accountBalance = accountQuery.findBalanceById(event.accountId).executeAsOne()
-        val balance = price + accountBalance
+        val newBalance = updateAccountBalance(accountId = event.accountId, balanceInterval = price)
 
         query.add(
             accountId = event.accountId,
             type = event.type,
             isIncome = event.type.isIncome,
             price = price,
-            balance = balance,
+            balance = newBalance,
             note = event.note,
             createDate = dateTimeProvider.now,
             lastUpdateDate = dateTimeProvider.now
         )
+    }
+
+    private fun updateAccountBalance(accountId: Long, balanceInterval: Long): Long {
+        val accountBalance = accountQuery.findBalanceById(id = accountId).executeAsOne()
+        val balance = accountBalance + balanceInterval
+
         accountQuery.updateBalanceById(
-            id = event.accountId,
+            id = accountId,
             balance = balance,
             lastUpdateDate = dateTimeProvider.now
         )
+
+        return balance
+    }
+
+    override fun delete(id: Long) = query.transaction {
+        val event = query.findById(id = id)
+            .executeAsOneOrNull() ?: return@transaction
+        updateAccountBalance(
+            accountId = event.accountId,
+            balanceInterval = -event.price
+        )
+
+        query.plusBalanceByIdGreaterThan(
+            id = id,
+            price = -event.price,
+            lastUpdateDate = dateTimeProvider.now
+        )
+        query.deleteById(id = id)
     }
 }
