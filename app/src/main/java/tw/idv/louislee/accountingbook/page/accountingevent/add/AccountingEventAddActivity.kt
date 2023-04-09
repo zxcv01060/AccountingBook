@@ -28,11 +28,11 @@ import tw.idv.louislee.accountingbook.state.AccountingEventFormState
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 
-class AddActivity : ComponentActivity() {
+class AccountingEventAddActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel = getViewModel<AddViewModel>()
+            val viewModel = getViewModel<AccountingEventAddViewModel>()
             val accounts by viewModel.findAllAccount()
                 .collectAsStateWithLifecycle(initialValue = emptyList())
 

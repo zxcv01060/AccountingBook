@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".page.accountingevent.add.AddActivity"
+            android:name=".page.accountingevent.add.AccountingEventAddActivity"
             android:exported="false" />
         <activity
             android:name=".page.accountingevent.detail.AccountingEventDetailActivity"

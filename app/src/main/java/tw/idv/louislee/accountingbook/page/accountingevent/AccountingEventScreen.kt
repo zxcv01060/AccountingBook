@@ -25,7 +25,7 @@ import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.extension.startActivity
 import tw.idv.louislee.accountingbook.extension.textId
-import tw.idv.louislee.accountingbook.page.accountingevent.add.AddActivity
+import tw.idv.louislee.accountingbook.page.accountingevent.add.AccountingEventAddActivity
 import tw.idv.louislee.accountingbook.page.accountingevent.detail.AccountingEventDetailActivity
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
@@ -50,7 +50,7 @@ fun AccountingEventScreen(events: List<AccountingEventDto>) {
             actions = {
                 val context = LocalContext.current
 
-                IconButton(onClick = { context.startActivity<AddActivity>() }) {
+                IconButton(onClick = { context.startActivity<AccountingEventAddActivity>() }) {
                     Icon(
                         imageVector = Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.common_add)

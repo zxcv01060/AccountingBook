@@ -10,7 +10,7 @@ import tw.idv.louislee.accountingbook.domain.service.AccountingEventService
 import tw.idv.louislee.accountingbook.state.AccountingEventFormState
 
 @KoinViewModel
-class AddViewModel(
+class AccountingEventAddViewModel(
     private val accountingEventService: AccountingEventService,
     private val accountService: AccountService
 ) : ViewModel() {
