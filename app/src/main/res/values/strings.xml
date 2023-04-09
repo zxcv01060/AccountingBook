@@ -4,8 +4,19 @@
     <!-- 通用 -->
     <string name="common_add">新增</string>
     <string name="common_price">$ %1$,d</string>
+    <string name="common_back">返回</string>
     <string name="common_submit">送出</string>
+    <string name="common_ok">確認</string>
     <string name="common_cancel">取消</string>
+    <string name="common_date_time_format">yyyy年MM月dd日 HH時mm分</string>
+    <string name="common_date_time_include_second_format">yyyy年MM月dd日 HH時mm分ss秒</string>
+    <string name="common_date_format">yyyy年MM月dd日</string>
+    <string name="common_time_format">HH時mm分</string>
+    <string name="common_time_include_second_format">HH時mm分ss秒</string>
+    <string name="common_taiwanese_date_format">民國%1$d年%2$d月%3$d日</string>
+    <string name="common_create_date">建立日期</string>
+    <string name="common_last_update_date">最後更新日期</string>
+    <string name="common_error_title">發生錯誤</string>
 
     <!-- 記帳紀錄 -->
     <string name="accounting_event_screen_title">記帳</string>
@@ -28,6 +39,8 @@
     <string name="accounting_event_account">帳戶</string>
     <string name="accounting_event_balance">餘額：%1$s</string>
     <string name="accounting_event_note">備註</string>
+    <string name="accounting_event_detail_title">詳細資訊</string>
+    <string name="accounting_event_detail_event_not_found">找不到此記帳紀錄：%1$d</string>
 
     <!-- 帳戶 -->
     <string name="account_list_title">帳戶</string>

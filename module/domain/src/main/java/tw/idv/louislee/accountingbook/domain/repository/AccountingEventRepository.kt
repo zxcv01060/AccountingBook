@@ -2,6 +2,7 @@ package tw.idv.louislee.accountingbook.domain.repository
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Single
@@ -14,6 +15,8 @@ import kotlin.coroutines.CoroutineContext
 
 internal interface AccountingEventRepository {
     fun findAll(context: CoroutineContext = Dispatchers.Default): Flow<List<AccountingEvent>>
+
+    fun findById(id: Long, context: CoroutineContext = Dispatchers.Default): Flow<AccountingEvent?>
 
     fun add(event: AccountingEventFormDto)
 }
@@ -28,6 +31,11 @@ internal class AccountingEventRepositoryImpl(
         query.findAll()
             .asFlow()
             .mapToList(context)
+
+    override fun findById(id: Long, context: CoroutineContext): Flow<AccountingEvent?> =
+        query.findById(id = id)
+            .asFlow()
+            .mapToOneOrNull(context)
 
     override fun add(event: AccountingEventFormDto) = query.transaction {
         val price = if (event.type.isIncome) {

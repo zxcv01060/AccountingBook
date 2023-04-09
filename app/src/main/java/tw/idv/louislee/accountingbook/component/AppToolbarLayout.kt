@@ -3,10 +3,13 @@ package tw.idv.louislee.accountingbook.component
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 
@@ -14,14 +17,16 @@ import tw.idv.louislee.accountingbook.theme.AppPreview
 fun AppToolbarLayout(
     @StringRes title: Int,
     modifier: Modifier = Modifier,
+    onNavigateBack: (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
     content: @Composable () -> Unit
 ) {
     AppToolbarLayout(
-        content = content,
-        title = stringResource(id = title),
         modifier = modifier,
-        actions = actions
+        onNavigateBack = onNavigateBack,
+        title = stringResource(id = title),
+        actions = actions,
+        content = content
     )
 }
 
@@ -31,12 +36,25 @@ private fun AppToolbarLayout(
     content: @Composable () -> Unit,
     title: String,
     modifier: Modifier = Modifier,
+    onNavigateBack: (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 modifier = modifier,
+                navigationIcon = {
+                    if (onNavigateBack == null) {
+                        return@TopAppBar
+                    }
+
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(id = R.string.common_back)
+                        )
+                    }
+                },
                 title = {
                     Text(text = title)
                 },

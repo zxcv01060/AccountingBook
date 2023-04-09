@@ -11,6 +11,9 @@ fun Context.finish() {
     activity.finish()
 }
 
-inline fun <reified A : Activity> Context.startActivity() {
-    startActivity(Intent(this, A::class.java))
+inline fun <reified A : Activity> Context.startActivity(intentBuilder: Intent.() -> Unit = {}) {
+    val intent = Intent(this, A::class.java)
+    intent.intentBuilder()
+
+    startActivity(intent)
 }

@@ -1,5 +1,6 @@
 package tw.idv.louislee.accountingbook.page.accountingevent
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +26,7 @@ import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.extension.startActivity
 import tw.idv.louislee.accountingbook.extension.textId
 import tw.idv.louislee.accountingbook.page.accountingevent.add.AddActivity
+import tw.idv.louislee.accountingbook.page.accountingevent.detail.AccountingEventDetailActivity
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 
@@ -63,19 +65,26 @@ fun AccountingEventScreen(events: List<AccountingEventDto>) {
 
 @Composable
 private fun AccountingEventList(events: List<AccountingEventDto>) {
+    val context = LocalContext.current
+
     LazyColumn {
         items(events) {
-            AccountingEventRow(event = it)
+            AccountingEventRow(event = it) {
+                context.startActivity<AccountingEventDetailActivity> {
+                    putExtra(AccountingEventDetailActivity.INTENT_ID, it.id)
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun AccountingEventRow(event: AccountingEventDto) {
+private fun AccountingEventRow(event: AccountingEventDto, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(all = 8.dp)
+            .clickable(onClick = onClick)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
