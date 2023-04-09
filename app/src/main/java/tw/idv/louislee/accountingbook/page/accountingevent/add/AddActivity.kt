@@ -55,7 +55,12 @@ private fun Content(
     onSubmitClick: () -> Unit
 ) {
     AccountingBookTheme {
-        AppToolbarLayout(title = R.string.accounting_event_add_title) {
+        val context = LocalContext.current
+
+        AppToolbarLayout(
+            title = R.string.accounting_event_add_title,
+            onNavigateBack = context::finish
+        ) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 AccountingEventForm(
                     modifier = Modifier.padding(horizontal = 8.dp),
