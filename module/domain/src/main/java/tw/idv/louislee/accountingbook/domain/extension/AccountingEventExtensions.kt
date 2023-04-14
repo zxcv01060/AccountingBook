@@ -13,6 +13,7 @@ fun AccountingEvent.toDto() = AccountingEventDto(
 
 fun AccountingEvent.toDetail() = AccountingEventDetailDto(
     id = id,
+    accountId = accountId,
     type = type,
     price = price,
     note = note,

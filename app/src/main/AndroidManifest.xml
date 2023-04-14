@@ -28,6 +28,9 @@
         <activity
             android:name=".page.accountingevent.detail.AccountingEventDetailActivity"
             android:exported="false" />
+        <activity
+            android:name=".page.accountingevent.edit.AccountingEventEditActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

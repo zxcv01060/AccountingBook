@@ -3,13 +3,26 @@ package tw.idv.louislee.accountingbook.page.accountingevent.detail
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -21,8 +34,11 @@ import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.component.AppToolbarLayout
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDetailDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
+import tw.idv.louislee.accountingbook.dto.parcelable
 import tw.idv.louislee.accountingbook.extension.finish
+import tw.idv.louislee.accountingbook.extension.startActivity
 import tw.idv.louislee.accountingbook.extension.textId
+import tw.idv.louislee.accountingbook.page.accountingevent.edit.AccountingEventEditActivity
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 import tw.idv.louislee.accountingbook.utils.AppDateFormatter
@@ -52,7 +68,12 @@ class AccountingEventDetailActivity : ComponentActivity() {
             Content(
                 id = id,
                 event = event,
-                onEditClick = { },
+                onEditClick = {
+                    context.startActivity<AccountingEventEditActivity> {
+                        putExtra(AccountingEventEditActivity.INTENT_ID, event?.id)
+                        putExtra(AccountingEventEditActivity.INTENT_EVENT, event?.parcelable)
+                    }
+                },
                 onDeleteConfirm = {
                     viewModel.delete(id)
                     context.finish()
@@ -80,6 +101,12 @@ private fun Content(
             onNavigateBack = context::finish,
             title = R.string.accounting_event_detail_title,
             actions = {
+                IconButton(onClick = onEditClick) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = stringResource(id = R.string.common_edit)
+                    )
+                }
                 IconButton(onClick = { isShowingDeleteConfirmDialog = true }) {
                     Icon(
                         imageVector = Icons.Filled.Delete,
@@ -208,6 +235,7 @@ private fun Preview() {
         id = 1,
         event = AccountingEventDetailDto(
             id = 1,
+            accountId = 1,
             type = AccountingEventType.FOOD_OR_DRINK,
             price = 35,
             note = "早餐 巧克力吐司 + 奶茶",

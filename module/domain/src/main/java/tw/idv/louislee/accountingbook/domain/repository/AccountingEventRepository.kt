@@ -21,6 +21,8 @@ internal interface AccountingEventRepository {
     fun add(event: AccountingEventFormDto)
 
     fun delete(id: Long)
+
+    fun updateById(id: Long, event: AccountingEventFormDto)
 }
 
 @Single
@@ -60,6 +62,8 @@ internal class AccountingEventRepositoryImpl(
     }
 
     private fun updateAccountBalance(accountId: Long, balanceInterval: Long): Long {
+
+        i
         val accountBalance = accountQuery.findBalanceById(id = accountId).executeAsOne()
         val balance = accountBalance + balanceInterval
 
@@ -86,5 +90,42 @@ internal class AccountingEventRepositoryImpl(
             lastUpdateDate = dateTimeProvider.now
         )
         query.deleteById(id = id)
+    }
+
+    override fun updateById(id: Long, event: AccountingEventFormDto) = query.transaction {
+        val originalEvent = query.findById(id = id)
+            .executeAsOneOrNull() ?: return@transaction
+        val price = if (event.type.isIncome) {
+            event.price
+        } else {
+            -event.price
+        }
+        //  原       新
+        // +100 -> +300 = +200
+        // +100 -> +50  = -50
+        // +100 -> -200 = -300
+        // +100 -> +100 = +0
+        // -100 -> -300 = -200
+        // -100 -> -50  = +50
+        val newBalance = updateAccountBalance(
+            accountId = event.accountId,
+            balanceInterval = price - originalEvent.price
+        )
+
+        query.plusBalanceByIdGreaterThan(
+            id = id,
+            price = -event.price,
+            lastUpdateDate = dateTimeProvider.now
+        )
+        query.updateById(
+            id = id,
+            accountId = event.accountId,
+            type = event.type,
+            isIncome = event.type.isIncome,
+            price = price,
+            balance = newBalance,
+            note = event.note,
+            lastUpdateDate = dateTimeProvider.now
+        )
     }
 }

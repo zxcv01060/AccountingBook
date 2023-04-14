@@ -23,6 +23,8 @@ interface AccountingEventService {
     fun add(event: AccountingEventFormDto)
 
     fun delete(id: Long)
+
+    fun updateById(id: Long, event: AccountingEventFormDto)
 }
 
 @Single
@@ -48,4 +50,6 @@ internal class AccountingEventServiceImpl(
         repository.add(event)
 
     override fun delete(id: Long) = repository.delete(id = id)
+    override fun updateById(id: Long, event: AccountingEventFormDto) =
+        repository.updateById(id = id, event = event)
 }

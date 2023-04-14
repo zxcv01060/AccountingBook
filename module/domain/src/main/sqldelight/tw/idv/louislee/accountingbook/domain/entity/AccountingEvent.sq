@@ -56,3 +56,14 @@ UPDATE AccountingEvent
 SET balance = balance + :price,
     lastUpdateDate = :lastUpdateDate
 WHERE id > :id;
+
+updateById:
+UPDATE AccountingEvent
+SET accountId = ?,
+    price = ?,
+    isIncome = ?,
+    balance = ?,
+    type = ?,
+    note = ?,
+    lastUpdateDate = ?
+WHERE id = ?;

@@ -6,6 +6,7 @@ import java.time.ZonedDateTime
 
 data class AccountingEventDetailDto(
     val id: Long,
+    val accountId: Long,
     val type: AccountingEventType,
     val price: Long,
     val note: String?,
@@ -16,6 +17,7 @@ data class AccountingEventDetailDto(
         val placeholder
             get() = AccountingEventDetailDto(
                 id = Long.MAX_VALUE,
+                accountId = Long.MAX_VALUE,
                 type = AccountingEventType.UNKNOWN_EXPENSES,
                 price = 0,
                 note = null,
