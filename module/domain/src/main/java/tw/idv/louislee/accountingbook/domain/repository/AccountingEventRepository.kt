@@ -62,11 +62,12 @@ internal class AccountingEventRepositoryImpl(
     }
 
     private fun updateAccountBalance(accountId: Long, balanceInterval: Long): Long {
-
-        i
         val accountBalance = accountQuery.findBalanceById(id = accountId).executeAsOne()
+        if (balanceInterval == 0L) {
+            return accountBalance
+        }
+        
         val balance = accountBalance + balanceInterval
-
         accountQuery.updateBalanceById(
             id = accountId,
             balance = balance,
