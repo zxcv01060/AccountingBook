@@ -34,6 +34,12 @@ SELECT *
 FROM AccountingEvent
 WHERE id = ?;
 
+findByAccountId:
+SELECT *
+FROM AccountingEvent
+WHERE accountId = ?
+ORDER BY createDate DESC;
+
 add:
 INSERT INTO AccountingEvent(accountId, price, isIncome, balance, type, note, createDate, lastUpdateDate)
 VALUES (

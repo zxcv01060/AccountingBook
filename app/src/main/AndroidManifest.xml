@@ -31,6 +31,9 @@
         <activity
             android:name=".page.accountingevent.edit.AccountingEventEditActivity"
             android:exported="false" />
+        <activity
+            android:name=".page.account.detail.AccountDetailActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

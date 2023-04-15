@@ -1,6 +1,11 @@
 package tw.idv.louislee.accountingbook.page.account
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Divider
@@ -9,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -19,7 +25,9 @@ import tw.idv.louislee.accountingbook.component.AppToolbarLayout
 import tw.idv.louislee.accountingbook.component.PriceText
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountType
+import tw.idv.louislee.accountingbook.extension.startActivity
 import tw.idv.louislee.accountingbook.extension.titleId
+import tw.idv.louislee.accountingbook.page.account.detail.AccountDetailActivity
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 
@@ -29,27 +37,38 @@ fun AccountScreen(viewModel: AccountViewModel = getViewModel()) {
     val coroutineContext = scope.coroutineContext
     val accounts by viewModel.findAll()
         .collectAsStateWithLifecycle(initialValue = emptyList(), context = coroutineContext)
+    val context = LocalContext.current
 
-    AccountScreen(accounts = accounts)
+    AccountScreen(
+        accounts = accounts,
+        onRowClick = {
+            context.startActivity<AccountDetailActivity> {
+                putExtra(
+                    AccountDetailActivity.INTENT_ID,
+                    it.id
+                )
+            }
+        })
 }
 
 @Composable
-fun AccountScreen(accounts: List<AccountDto>) {
+fun AccountScreen(accounts: List<AccountDto>, onRowClick: (account: AccountDto) -> Unit = {}) {
     AccountingBookTheme {
         AppToolbarLayout(title = R.string.account_list_title) {
-            AccountList(accounts = accounts)
+            AccountList(accounts = accounts, onRowClick = onRowClick)
         }
     }
 }
 
 @Composable
-private fun AccountList(accounts: List<AccountDto>) {
+private fun AccountList(accounts: List<AccountDto>, onRowClick: (account: AccountDto) -> Unit) {
     LazyColumn {
         itemsIndexed(accounts) { index, account ->
             val padding = 8.dp
 
             Row(
                 modifier = Modifier
+                    .clickable(onClick = { onRowClick(account) })
                     .fillMaxWidth()
                     .padding(all = padding)
             ) {

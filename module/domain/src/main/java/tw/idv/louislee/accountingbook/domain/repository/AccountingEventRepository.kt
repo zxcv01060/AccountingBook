@@ -18,6 +18,11 @@ internal interface AccountingEventRepository {
 
     fun findById(id: Long, context: CoroutineContext = Dispatchers.Default): Flow<AccountingEvent?>
 
+    fun findByAccountId(
+        accountId: Long,
+        context: CoroutineContext = Dispatchers.Default
+    ): Flow<List<AccountingEvent>>
+
     fun add(event: AccountingEventFormDto)
 
     fun delete(id: Long)
@@ -40,6 +45,13 @@ internal class AccountingEventRepositoryImpl(
         query.findById(id = id)
             .asFlow()
             .mapToOneOrNull(context)
+
+    override fun findByAccountId(
+        accountId: Long,
+        context: CoroutineContext
+    ): Flow<List<AccountingEvent>> = query.findByAccountId(accountId = accountId)
+        .asFlow()
+        .mapToList(context)
 
     override fun add(event: AccountingEventFormDto) = query.transaction {
         val price = if (event.type.isIncome) {
@@ -66,7 +78,7 @@ internal class AccountingEventRepositoryImpl(
         if (balanceInterval == 0L) {
             return accountBalance
         }
-        
+
         val balance = accountBalance + balanceInterval
         accountQuery.updateBalanceById(
             id = accountId,

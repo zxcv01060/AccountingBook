@@ -21,6 +21,7 @@
     <string name="common_error_title">發生錯誤</string>
 
     <!-- 記帳紀錄 -->
+    <string name="accounting_event">記帳紀錄</string>
     <string name="accounting_event_screen_title">記帳</string>
     <string name="accounting_event_list_title">記帳紀錄</string>
     <string name="accounting_event_type_unknown">未分類</string>
@@ -54,4 +55,9 @@
     <string name="account_type_cash">現金</string>
     <string name="account_type_bank">銀行</string>
     <string name="account_type_credit_card">信用卡(含簽帳金融卡)</string>
+    <string name="account_detail_title">帳戶</string>
+    <string name="account_detail_account_not_found">找不到此帳戶：%1$d</string>
+    <string name="account_name">帳戶名稱</string>
+    <string name="account_type">類型</string>
+    <string name="account_balance">餘額</string>
 </resources>

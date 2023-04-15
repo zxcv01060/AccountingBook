@@ -35,6 +35,11 @@ SELECT balance
 FROM Account
 WHERE id = ?;
 
+findById:
+SELECT *
+FROM Account
+WHERE id = ?;
+
 updateBalanceById:
 UPDATE Account
 SET balance = ?,
