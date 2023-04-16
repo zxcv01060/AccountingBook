@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AccountingBook</string>
+    <string name="app_name">記帳本</string>
 
     <!-- 通用 -->
     <string name="common_add">新增</string>
