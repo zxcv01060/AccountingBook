@@ -65,7 +65,7 @@ fun AccountScreen(
 ) {
     AccountingBookTheme {
         AppToolbarLayout(
-            title = R.string.account_list_title,
+            title = stringResource(id = R.string.account_list_title),
             actions = {
                 IconButton(onClick = onAddClick) {
                     Icon(

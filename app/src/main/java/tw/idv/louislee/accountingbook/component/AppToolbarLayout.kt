@@ -1,6 +1,5 @@
 package tw.idv.louislee.accountingbook.component
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -13,31 +12,14 @@ import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppToolbarLayout(
-    @StringRes title: Int,
+    title: String,
     modifier: Modifier = Modifier,
     onNavigateBack: (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
     content: @Composable () -> Unit
-) {
-    AppToolbarLayout(
-        modifier = modifier,
-        onNavigateBack = onNavigateBack,
-        title = stringResource(id = title),
-        actions = actions,
-        content = content
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun AppToolbarLayout(
-    content: @Composable () -> Unit,
-    title: String,
-    modifier: Modifier = Modifier,
-    onNavigateBack: (() -> Unit)? = null,
-    actions: @Composable RowScope.() -> Unit = {}
 ) {
     Scaffold(
         topBar = {

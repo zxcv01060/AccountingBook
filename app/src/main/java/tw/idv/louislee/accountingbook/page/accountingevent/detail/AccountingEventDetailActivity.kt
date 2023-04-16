@@ -99,7 +99,7 @@ private fun Content(
     AccountingBookTheme {
         AppToolbarLayout(
             onNavigateBack = context::finish,
-            title = R.string.accounting_event_detail_title,
+            title = stringResource(id = R.string.accounting_event_detail_title),
             actions = {
                 IconButton(onClick = onEditClick) {
                     Icon(

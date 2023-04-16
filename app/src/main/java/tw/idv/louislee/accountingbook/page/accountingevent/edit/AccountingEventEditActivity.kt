@@ -90,7 +90,7 @@ private fun Content(
     AccountingBookTheme {
         AppToolbarLayout(
             onNavigateBack = onNavigationBack,
-            title = R.string.accounting_event_edit_title
+            title = stringResource(id = R.string.accounting_event_edit_title)
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 AccountingEventForm(

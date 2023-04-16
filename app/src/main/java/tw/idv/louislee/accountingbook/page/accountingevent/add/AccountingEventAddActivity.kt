@@ -3,7 +3,11 @@ package tw.idv.louislee.accountingbook.page.accountingevent.add
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -58,7 +62,7 @@ private fun Content(
         val context = LocalContext.current
 
         AppToolbarLayout(
-            title = R.string.accounting_event_add_title,
+            title = stringResource(id = R.string.accounting_event_add_title),
             onNavigateBack = context::finish
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

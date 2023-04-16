@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.getViewModel
 import tw.idv.louislee.accountingbook.R
@@ -45,7 +46,10 @@ private fun Content(
     onSubmit: () -> Unit = {}
 ) {
     AccountingBookTheme {
-        AppToolbarLayout(title = R.string.account_add_title, onNavigateBack = onNavigationBack) {
+        AppToolbarLayout(
+            title = stringResource(id = R.string.account_add_title),
+            onNavigateBack = onNavigationBack
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()

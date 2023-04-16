@@ -73,7 +73,10 @@ private fun Content(
     onNavigationBack: () -> Unit = {}
 ) {
     AccountingBookTheme {
-        AppToolbarLayout(title = R.string.account_detail_title, onNavigateBack = onNavigationBack) {
+        AppToolbarLayout(
+            title = stringResource(id = R.string.account_detail_title),
+            onNavigateBack = onNavigationBack
+        ) {
             AccountDetail(id = id, account = account, dateFormatter = dateFormatter)
         }
     }
