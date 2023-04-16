@@ -9,6 +9,8 @@ CREATE TABLE Account (
     name TEXT NOT NULL,
     -- 類型
     type INTEGER AS AccountType NOT NULL,
+    -- 初始金額
+    initBalance INTEGER NOT NULL,
     -- 當前餘額
     balance INTEGER NOT NULL,
     -- 建立日期
@@ -17,9 +19,10 @@ CREATE TABLE Account (
     lastUpdateDate INTEGER AS ZonedDateTime NOT NULL
 );
 
-INSERT INTO Account(name, type, balance, createDate, lastUpdateDate)
+INSERT INTO Account(name, type, initBalance, balance, createDate, lastUpdateDate)
 VALUES (
     '現金',
+    0,
     0,
     0,
     strftime('%s') * 1000, -- %s只到毫秒，但ZonedDateTime精確到毫秒，因此會少三位數，要補上
@@ -45,3 +48,7 @@ UPDATE Account
 SET balance = ?,
     lastUpdateDate = ?
 WHERE id = ?;
+
+add:
+INSERT INTO Account(name, type, initBalance, balance, createDate, lastUpdateDate)
+VALUES(:name, :type, :balance, :balance, :createDate, :createDate);

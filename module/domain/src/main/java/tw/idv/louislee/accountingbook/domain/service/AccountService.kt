@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Single
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDetailDto
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
+import tw.idv.louislee.accountingbook.domain.dto.account.AccountFormDto
 import tw.idv.louislee.accountingbook.domain.entity.Account
 import tw.idv.louislee.accountingbook.domain.extension.toDetail
 import tw.idv.louislee.accountingbook.domain.repository.AccountRepository
@@ -17,6 +18,8 @@ interface AccountService {
     fun findAll(context: CoroutineContext = Dispatchers.Default): Flow<List<AccountDto>>
 
     fun findById(id: Long, context: CoroutineContext = Dispatchers.Default): Flow<AccountDetailDto?>
+
+    fun add(account: AccountFormDto)
 }
 
 @Single
@@ -57,4 +60,6 @@ internal class AccountServiceImpl(
                     accountingEvents = accountingEvents.map { it.toDetail() }
                 )
             }
+
+    override fun add(account: AccountFormDto) = repository.add(account)
 }

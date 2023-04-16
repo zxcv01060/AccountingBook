@@ -1,0 +1,3 @@
+-- 初始金額
+ALTER TABLE Account
+ADD COLUMN initBalance INTEGER NOT NULL DEFAULT 0;

@@ -60,4 +60,5 @@
     <string name="account_name">帳戶名稱</string>
     <string name="account_type">類型</string>
     <string name="account_balance">餘額</string>
+    <string name="account_add_title">新增帳戶</string>
 </resources>

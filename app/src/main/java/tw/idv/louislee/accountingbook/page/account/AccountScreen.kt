@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,6 +31,7 @@ import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountType
 import tw.idv.louislee.accountingbook.extension.startActivity
 import tw.idv.louislee.accountingbook.extension.titleId
+import tw.idv.louislee.accountingbook.page.account.add.AccountAddActivity
 import tw.idv.louislee.accountingbook.page.account.detail.AccountDetailActivity
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
@@ -41,6 +46,7 @@ fun AccountScreen(viewModel: AccountViewModel = getViewModel()) {
 
     AccountScreen(
         accounts = accounts,
+        onAddClick = { context.startActivity<AccountAddActivity>() },
         onRowClick = {
             context.startActivity<AccountDetailActivity> {
                 putExtra(
@@ -52,9 +58,23 @@ fun AccountScreen(viewModel: AccountViewModel = getViewModel()) {
 }
 
 @Composable
-fun AccountScreen(accounts: List<AccountDto>, onRowClick: (account: AccountDto) -> Unit = {}) {
+fun AccountScreen(
+    accounts: List<AccountDto>,
+    onAddClick: () -> Unit = {},
+    onRowClick: (account: AccountDto) -> Unit = {}
+) {
     AccountingBookTheme {
-        AppToolbarLayout(title = R.string.account_list_title) {
+        AppToolbarLayout(
+            title = R.string.account_list_title,
+            actions = {
+                IconButton(onClick = onAddClick) {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = stringResource(id = R.string.common_add)
+                    )
+                }
+            }
+        ) {
             AccountList(accounts = accounts, onRowClick = onRowClick)
         }
     }

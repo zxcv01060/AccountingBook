@@ -34,6 +34,9 @@
         <activity
             android:name=".page.account.detail.AccountDetailActivity"
             android:exported="false" />
+        <activity
+            android:name=".page.account.add.AccountAddActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
