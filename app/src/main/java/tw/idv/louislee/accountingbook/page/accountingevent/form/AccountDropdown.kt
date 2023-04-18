@@ -87,7 +87,10 @@ private fun AccountDropdownBox(
                             Text(text = stringResource(id = R.string.common_price, it.balance))
                         }
                     },
-                    onClick = { onAccountSelect(it) }
+                    onClick = {
+                        onAccountSelect(it)
+                        onExpandedChange(false)
+                    }
                 )
             }
         }
@@ -101,7 +104,14 @@ private fun Preview() {
         Surface {
             AccountDropdown(
                 id = 1,
-                accounts = listOf(AccountDto(id = 1, name = "現金", AccountType.CASH, balance = 500)),
+                accounts = listOf(
+                    AccountDto(
+                        id = 1,
+                        name = "現金",
+                        AccountType.CASH,
+                        balance = 500
+                    )
+                ),
                 onAccountSelect = {}
             )
         }
