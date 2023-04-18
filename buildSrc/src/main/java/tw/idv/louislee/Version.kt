@@ -19,4 +19,6 @@ object Version {
     const val SQL_DELIGHT = "1.5.5"
 
     const val NAV = "2.5.3"
+
+    const val SHEETS_COMPOSE_DIALOGS = "1.1.1"
 }
