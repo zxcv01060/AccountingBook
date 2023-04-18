@@ -9,14 +9,15 @@ CREATE TABLE Account (
     name TEXT NOT NULL,
     -- 類型
     type INTEGER AS AccountType NOT NULL,
-    -- 初始金額
-    initBalance INTEGER NOT NULL,
     -- 當前餘額
     balance INTEGER NOT NULL,
     -- 建立日期
     createDate INTEGER AS ZonedDateTime NOT NULL,
     -- 最後更新日期
-    lastUpdateDate INTEGER AS ZonedDateTime NOT NULL
+    lastUpdateDate INTEGER AS ZonedDateTime NOT NULL,
+    -- 初始金額
+    -- TODO: 下次此表有新增欄位時，要把此欄位改到type欄位底下，先修正不符合2.sqm執行後結構的問題
+    initBalance INTEGER NOT NULL
 );
 
 INSERT INTO Account(name, type, initBalance, balance, createDate, lastUpdateDate)
