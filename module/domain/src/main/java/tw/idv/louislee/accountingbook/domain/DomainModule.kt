@@ -4,7 +4,11 @@ import com.squareup.sqldelight.db.SqlDriver
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
-import tw.idv.louislee.accountingbook.domain.entity.*
+import tw.idv.louislee.accountingbook.domain.entity.Account
+import tw.idv.louislee.accountingbook.domain.entity.AccountTypeAdapter
+import tw.idv.louislee.accountingbook.domain.entity.AccountingBookDatabase
+import tw.idv.louislee.accountingbook.domain.entity.AccountingEvent
+import tw.idv.louislee.accountingbook.domain.entity.AccountingEventTypeAdapter
 import tw.idv.louislee.accountingbook.domain.entity.adapter.DateTimeAdapter
 import tw.idv.louislee.accountingbook.domain.repository.RepositoryModule
 
@@ -27,6 +31,7 @@ class DomainModule {
             ),
             AccountingEvent.Adapter(
                 typeAdapter = AccountingEventTypeAdapter,
+                recordDateAdapter = dateTimeAdapter,
                 createDateAdapter = dateTimeAdapter,
                 lastUpdateDateAdapter = dateTimeAdapter
             )

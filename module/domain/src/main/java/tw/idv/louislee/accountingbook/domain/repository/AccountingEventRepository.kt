@@ -68,6 +68,7 @@ internal class AccountingEventRepositoryImpl(
             price = price,
             balance = newBalance,
             note = event.note,
+            recordDate = event.recordDate ?: dateTimeProvider.now,
             createDate = dateTimeProvider.now
         )
     }
@@ -137,6 +138,7 @@ internal class AccountingEventRepositoryImpl(
             price = price,
             balance = newBalance,
             note = event.note,
+            recordDate = event.recordDate ?: originalEvent.recordDate,
             lastUpdateDate = dateTimeProvider.now
         )
     }

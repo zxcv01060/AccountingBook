@@ -17,6 +17,8 @@ CREATE TABLE AccountingEvent (
     type INTEGER AS AccountingEventType NOT NULL,
     -- 備註
     note TEXT,
+    -- 紀錄日期
+    recordDate INTEGER AS ZonedDateTime NOT NULL,
     -- 建立日期
     createDate INTEGER AS ZonedDateTime NOT NULL,
     -- 最後更新日期
@@ -38,10 +40,10 @@ findByAccountId:
 SELECT *
 FROM AccountingEvent
 WHERE accountId = ?
-ORDER BY createDate DESC;
+ORDER BY id DESC;
 
 add:
-INSERT INTO AccountingEvent(accountId, price, isIncome, balance, type, note, createDate, lastUpdateDate)
+INSERT INTO AccountingEvent(accountId, price, isIncome, balance, type, note, recordDate, createDate, lastUpdateDate)
 VALUES (
     :accountId,
     :price,
@@ -49,6 +51,7 @@ VALUES (
     :balance,
     :type,
     :note,
+    :recordDate,
     :createDate,
     :createDate
 );
@@ -71,5 +74,6 @@ SET accountId = ?,
     balance = ?,
     type = ?,
     note = ?,
+    recordDate = ?,
     lastUpdateDate = ?
 WHERE id = ?;

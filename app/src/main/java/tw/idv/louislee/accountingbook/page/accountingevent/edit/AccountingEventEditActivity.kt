@@ -75,6 +75,7 @@ class AccountingEventEditActivity : ComponentActivity() {
             accountId = event.accountId,
             type = event.type,
             price = event.price.absoluteValue.toUInt(),
+            recordDate = event.recordDate,
             note = event.note
         )
     }

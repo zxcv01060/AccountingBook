@@ -184,6 +184,10 @@ private fun AccountingEventDetail(
             content = dateFormatter.formatDateTime(event.lastUpdateDate)
         ),
         DetailRow(
+            label = stringResource(id = R.string.accounting_event_record_date),
+            content = dateFormatter.formatDateTime(event.recordDate)
+        ),
+        DetailRow(
             label = stringResource(id = R.string.accounting_event_note),
             content = event.note ?: ""
         )
@@ -239,6 +243,11 @@ private fun Preview() {
             type = AccountingEventType.FOOD_OR_DRINK,
             price = 35,
             note = "早餐 巧克力吐司 + 奶茶",
+            recordDate = ZonedDateTime.of(
+                2023, 5, 29,
+                7, 29, 43, 0,
+                ZoneId.of("Asia/Taipei")
+            ),
             createDate = ZonedDateTime.of(
                 2023, 5, 29,
                 7, 29, 43, 0,

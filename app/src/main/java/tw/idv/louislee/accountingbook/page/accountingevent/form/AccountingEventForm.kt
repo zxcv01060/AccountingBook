@@ -1,18 +1,27 @@
 package tw.idv.louislee.accountingbook.page.accountingevent.form
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import tw.idv.louislee.accountingbook.R
+import tw.idv.louislee.accountingbook.component.form.AppDateTimeTextField
 import tw.idv.louislee.accountingbook.domain.DomainConstant
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountType
@@ -46,6 +55,13 @@ fun AccountingEventForm(
             id = state.accountId,
             accounts = accounts,
             onAccountSelect = { state.accountId = it.id }
+        )
+
+        AppDateTimeTextField(
+            modifier = Modifier.fillMaxWidth(),
+            label = stringResource(id = R.string.accounting_event_record_date),
+            dateTime = state.recordDate,
+            onDateTimeChange = { state.recordDate = it }
         )
 
         OutlinedTextField(

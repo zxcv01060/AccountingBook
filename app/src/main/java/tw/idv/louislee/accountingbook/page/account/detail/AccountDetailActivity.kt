@@ -181,7 +181,7 @@ private fun AccountingEventColumn(
                     Text(text = accountingEvent.note ?: "")
                 }
 
-                Text(text = dateFormatter.formatDateTime(accountingEvent.createDate))
+                Text(text = dateFormatter.formatDateTime(accountingEvent.recordDate))
             }
 
             if (index != accountingEvents.lastIndex) {
@@ -208,6 +208,11 @@ private fun Preview() {
                     type = AccountingEventType.FOOD_OR_DRINK,
                     price = -500,
                     note = "早餐",
+                    recordDate = ZonedDateTime.of(
+                        2023, 4, 16,
+                        7, 5, 41, 0,
+                        ZoneId.systemDefault()
+                    ),
                     createDate = ZonedDateTime.of(
                         2023, 4, 16,
                         7, 5, 41, 0,
@@ -225,6 +230,11 @@ private fun Preview() {
                     type = AccountingEventType.UNKNOWN_INCOME,
                     price = 2819,
                     note = "現有金額",
+                    recordDate = ZonedDateTime.of(
+                        2023, 4, 15,
+                        10, 6, 29, 0,
+                        ZoneId.systemDefault()
+                    ),
                     createDate = ZonedDateTime.of(
                         2023, 4, 15,
                         10, 6, 29, 0,

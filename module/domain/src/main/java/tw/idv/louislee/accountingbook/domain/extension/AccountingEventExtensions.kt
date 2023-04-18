@@ -17,6 +17,7 @@ fun AccountingEvent.toDetail() = AccountingEventDetailDto(
     type = type,
     price = price,
     note = note,
+    recordDate = recordDate,
     createDate = createDate,
     lastUpdateDate = lastUpdateDate
 )
