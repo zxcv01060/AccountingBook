@@ -26,7 +26,7 @@ enum class AccountingEventType(val isIncome: Boolean = false) {
     /**
      * 發票
      */
-    BILL(isIncome = true),
+    INVOICE(isIncome = true),
 
     /**
      * 存款

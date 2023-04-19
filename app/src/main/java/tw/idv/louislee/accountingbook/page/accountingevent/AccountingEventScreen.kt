@@ -119,7 +119,7 @@ private fun Preview() {
         AccountingEventDto(
             id = 2,
             price = 2000,
-            type = AccountingEventType.BILL,
+            type = AccountingEventType.INVOICE,
             note = "2023年2、3月的發票中一張"
         )
     )
