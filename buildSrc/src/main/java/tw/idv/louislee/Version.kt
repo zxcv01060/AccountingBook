@@ -21,4 +21,16 @@ object Version {
     const val NAV = "2.5.3"
 
     const val SHEETS_COMPOSE_DIALOGS = "1.1.1"
+
+    const val CAMERA_X = "1.2.2"
+    const val CAMERA_X_ML_KIT_VISION = "1.3.0-alpha05"
+
+    const val ML_KIT_BARCODE_SCANNING = "17.1.0"
+
+    /**
+     * Google Jetpack Compose Permission
+     *
+     * https://central.sonatype.com/artifact/com.google.accompanist/accompanist-permissions
+     */
+    const val PERMISSION = "0.30.1"
 }
