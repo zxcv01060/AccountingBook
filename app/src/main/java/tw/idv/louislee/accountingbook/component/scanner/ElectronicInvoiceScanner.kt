@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -89,7 +88,7 @@ private fun Content(
     onScan: (electronicInvoiceBarcode: ElectronicInvoiceBarcodeDto) -> Unit
 ) {
     AndroidView(
-        modifier = Modifier.size(width = 200.dp, height = 200.dp) then modifier,
+        modifier = modifier,
         factory = { createCameraView(logger, it, onScan) }
     )
 }
