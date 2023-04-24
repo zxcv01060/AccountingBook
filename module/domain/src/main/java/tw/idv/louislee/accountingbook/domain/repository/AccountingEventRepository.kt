@@ -12,6 +12,7 @@ import tw.idv.louislee.accountingbook.domain.entity.AccountQueries
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEvent
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventQueries
 import tw.idv.louislee.accountingbook.domain.entity.Invoice
+import tw.idv.louislee.accountingbook.domain.entity.InvoiceProductQueries
 import tw.idv.louislee.accountingbook.domain.entity.InvoiceQueries
 import tw.idv.louislee.accountingbook.domain.utils.DateTimeProvider
 import kotlin.coroutines.CoroutineContext
@@ -38,7 +39,8 @@ internal class AccountingEventRepositoryImpl(
     private val dateTimeProvider: DateTimeProvider,
     private val query: AccountingEventQueries,
     private val accountQuery: AccountQueries,
-    private val invoiceQuery: InvoiceQueries
+    private val invoiceQuery: InvoiceQueries,
+    private val invoiceProductQuery: InvoiceProductQueries
 ) : AccountingEventRepository {
     override fun findAll(context: CoroutineContext): Flow<List<AccountingEvent>> =
         query.findAll()
@@ -88,6 +90,14 @@ internal class AccountingEventRepositoryImpl(
                         createDate = dateTimeProvider.now,
                     )
                 )
+                for (product in electronicInvoice.products) {
+                    invoiceProductQuery.add(
+                        invoiceId = electronicInvoice.invoiceNumber,
+                        name = product.name,
+                        unitPrice = product.unitPrice,
+                        count = product.count
+                    )
+                }
             }
             query.add(
                 accountId = event.accountId,

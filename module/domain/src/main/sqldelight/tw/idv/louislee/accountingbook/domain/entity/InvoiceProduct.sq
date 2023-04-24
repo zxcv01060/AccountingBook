@@ -16,3 +16,7 @@ findByInvoiceId:
 SELECT *
 FROM InvoiceProduct
 WHERE invoiceId = ?;
+
+add:
+INSERT INTO InvoiceProduct(invoiceId, name, unitPrice, count)
+VALUES (?, ?, ?, ?);
