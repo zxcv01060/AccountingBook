@@ -142,6 +142,9 @@ internal class AccountingEventRepositoryImpl(
             lastUpdateDate = dateTimeProvider.now
         )
         query.deleteById(id = id)
+        if (event.invoiceId != null) {
+            invoiceQuery.deleteById(invoiceId = event.invoiceId)
+        }
     }
 
     override fun updateById(id: Long, event: AccountingEventFormDto) = query.transaction {

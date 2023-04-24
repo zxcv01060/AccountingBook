@@ -45,3 +45,11 @@ findById:
 SELECT *
 FROM Invoice
 WHERE id = ?;
+
+deleteById {
+    DELETE FROM InvoiceProduct
+    WHERE invoiceId = :invoiceId;
+
+    DELETE FROM Invoice
+    WHERE id = :invoiceId;
+}
