@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -93,7 +95,12 @@ private fun Content(
             onNavigateBack = onNavigationBack,
             title = stringResource(id = R.string.accounting_event_edit_title)
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            val scrollState = rememberScrollState()
+
+            Column(
+                modifier = Modifier.verticalScroll(scrollState),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 AccountingEventForm(
                     modifier = Modifier.padding(all = 8.dp),
                     state = state,

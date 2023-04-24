@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -50,8 +52,11 @@ private fun Content(
             title = stringResource(id = R.string.account_add_title),
             onNavigateBack = onNavigationBack
         ) {
+            val scrollState = rememberScrollState()
+
             Column(
                 modifier = Modifier
+                    .verticalScroll(scrollState)
                     .fillMaxWidth()
                     .padding(all = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)

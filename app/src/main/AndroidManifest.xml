@@ -29,19 +29,22 @@
         </activity>
         <activity
             android:name=".page.accountingevent.add.AccountingEventAddActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".page.accountingevent.detail.AccountingEventDetailActivity"
             android:exported="false" />
         <activity
             android:name=".page.accountingevent.edit.AccountingEventEditActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".page.account.detail.AccountDetailActivity"
             android:exported="false" />
         <activity
             android:name=".page.account.add.AccountAddActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".page.ElectronicInvoiceScannerActivity"
             android:exported="false" />
