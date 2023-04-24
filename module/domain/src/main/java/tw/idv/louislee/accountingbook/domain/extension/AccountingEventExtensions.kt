@@ -2,6 +2,7 @@ package tw.idv.louislee.accountingbook.domain.extension
 
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDetailDto
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDto
+import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEvent
 
 fun AccountingEvent.toDto() = AccountingEventDto(
@@ -11,9 +12,10 @@ fun AccountingEvent.toDto() = AccountingEventDto(
     note = note
 )
 
-fun AccountingEvent.toDetail() = AccountingEventDetailDto(
+fun AccountingEvent.toDetail(invoice: ElectronicInvoiceDto?) = AccountingEventDetailDto(
     id = id,
     accountId = accountId,
+    invoice = invoice,
     type = type,
     price = price,
     note = note,

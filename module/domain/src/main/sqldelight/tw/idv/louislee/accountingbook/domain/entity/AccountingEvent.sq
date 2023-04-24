@@ -7,6 +7,8 @@ CREATE TABLE AccountingEvent (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     -- 帳戶編號
     accountId INTEGER NOT NULL,
+    -- 發票號碼
+    invoiceId TEXT,
     -- 帳戶餘額，扣除或加上金額後的餘額
     balance INTEGER NOT NULL,
     -- 金額
@@ -23,7 +25,8 @@ CREATE TABLE AccountingEvent (
     createDate INTEGER AS ZonedDateTime NOT NULL,
     -- 最後更新日期
     lastUpdateDate INTEGER AS ZonedDateTime NOT NULL,
-    FOREIGN KEY(accountId) REFERENCES Account(id)
+    FOREIGN KEY(accountId) REFERENCES Account(id),
+    FOREIGN KEY(invoiceId) REFERENCES Invoice(id)
 );
 
 findAll:
@@ -43,9 +46,10 @@ WHERE accountId = ?
 ORDER BY id DESC;
 
 add:
-INSERT INTO AccountingEvent(accountId, price, isIncome, balance, type, note, recordDate, createDate, lastUpdateDate)
+INSERT INTO AccountingEvent(accountId, invoiceId, price, isIncome, balance, type, note, recordDate, createDate, lastUpdateDate)
 VALUES (
     :accountId,
+    :invoiceId,
     :price,
     :isIncome,
     :balance,
@@ -69,6 +73,7 @@ WHERE id > :id;
 updateById:
 UPDATE AccountingEvent
 SET accountId = ?,
+    invoiceId = ?,
     price = ?,
     isIncome = ?,
     balance = ?,

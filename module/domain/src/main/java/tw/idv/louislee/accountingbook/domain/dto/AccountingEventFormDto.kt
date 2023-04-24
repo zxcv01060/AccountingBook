@@ -8,6 +8,7 @@ data class AccountingEventFormDto(
     var type: AccountingEventType = AccountingEventType.UNKNOWN_EXPENSES,
     var price: Long = 0,
     var accountId: Long = DomainConstant.CASH_ACCOUNT_ID,
+    var invoiceId: String? = null,
     var note: String? = null,
     var recordDate: ZonedDateTime? = null
 )

@@ -20,23 +20,36 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.getViewModel
+import org.koin.core.parameter.parametersOf
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.component.AppToolbarLayout
 import tw.idv.louislee.accountingbook.domain.DomainConstant
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountType
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
+import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeDto
 import tw.idv.louislee.accountingbook.extension.finish
+import tw.idv.louislee.accountingbook.extension.getParcelableExtraCompat
 import tw.idv.louislee.accountingbook.page.accountingevent.form.AccountingEventForm
 import tw.idv.louislee.accountingbook.state.AccountingEventFormState
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 
 class AccountingEventAddActivity : ComponentActivity() {
+    companion object {
+        const val INTENT_ELECTRONIC_INVOICE_BARCODE =
+            "AccountingEventAddActivity.electronicInvoiceBarcode"
+    }
+
+    private val barcode: ElectronicInvoiceBarcodeDto? by lazy {
+        intent.getParcelableExtraCompat(INTENT_ELECTRONIC_INVOICE_BARCODE)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel = getViewModel<AccountingEventAddViewModel>()
+            val viewModel =
+                getViewModel<AccountingEventAddViewModel>(parameters = { parametersOf(barcode) })
             val accounts by viewModel.findAllAccount()
                 .collectAsStateWithLifecycle(initialValue = emptyList())
 

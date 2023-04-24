@@ -1,8 +1,16 @@
-package tw.idv.louislee.accountingbook.dto
+package tw.idv.louislee.accountingbook.domain.dto
 
 import java.time.LocalDate
 
-data class ElectronicInvoiceBarcode(
+data class ElectronicInvoiceDto(
+    /**
+     * 左邊條碼的文字內容，編碼固定為UTF-8
+     */
+    val leftBarcode: String,
+    /**
+     * 右邊條碼的文字內容，編碼固定為UTF-8
+     */
+    val rightBarcode: String,
     /**
      * 發票號碼
      */
@@ -58,13 +66,21 @@ data class ElectronicInvoiceBarcode(
     /**
      * 營業人的補充資訊
      */
-    val additionalInformation: String
+    val additionalInformation: String?
 )
 
 enum class ElectronicInvoiceBarcodeEncoding {
     BIG_5,
     UTF_8,
-    BASE_64
+    BASE_64;
+
+    internal class ColumnAdapter :
+        com.squareup.sqldelight.ColumnAdapter<ElectronicInvoiceBarcodeEncoding, Long> {
+        override fun decode(databaseValue: Long): ElectronicInvoiceBarcodeEncoding =
+            values()[databaseValue.toInt()]
+
+        override fun encode(value: ElectronicInvoiceBarcodeEncoding): Long = value.ordinal.toLong()
+    }
 }
 
 data class ElectronicInvoiceProductDto(

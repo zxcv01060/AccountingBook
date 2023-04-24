@@ -21,6 +21,29 @@
     <string name="common_error_title">發生錯誤</string>
     <string name="common_request_permission">請求權限</string>
     <string name="common_camera_permission_request_message">此功能需要使用相機才能使用，請同意相機使用權限</string>
+    <string name="common_no_permission">無權限</string>
+
+    <!-- 電子發票掃描 -->
+    <string name="electronic_invoice_scanner_title">電子發票掃描</string>
+    <string name="electronic_invoice_scanner_required_permission_message">掃描電子發票需要使用手機的相機功能才能使用</string>
+    <string name="electronic_invoice_invoice_number">發票號碼</string>
+    <string name="electronic_invoice_date">發票開立日期</string>
+    <string name="electronic_invoice_random_code">隨機碼</string>
+    <string name="electronic_invoice_untaxed_price">未稅的銷售額</string>
+    <string name="electronic_invoice_price">銷售額</string>
+    <string name="electronic_invoice_buyer_unified_business_number">買方的統一編號</string>
+    <string name="electronic_invoice_seller_unified_business_number">賣方的統一編號</string>
+    <string name="electronic_invoice_verification_information">加密驗證資訊</string>
+    <string name="electronic_invoice_seller_custom_information">營業人自行使用區</string>
+    <string name="electronic_invoice_qr_code_product_count">左右條碼上面記載的商品數</string>
+    <string name="electronic_invoice_invoice_product_count">發票上的商品數</string>
+    <string name="electronic_invoice_encoding">商品資訊的編碼</string>
+    <string name="electronic_invoice_product">商品清單</string>
+    <string name="electronic_invoice_product_name">商品名稱</string>
+    <string name="electronic_invoice_product_unit_price">單價</string>
+    <string name="electronic_invoice_product_count">數量</string>
+    <string name="electronic_invoice_product_total_price">總價</string>
+    <string name="electronic_invoice_additional_information">營業人的補充資訊</string>
 
     <!-- 記帳紀錄 -->
     <string name="accounting_event">記帳紀錄</string>

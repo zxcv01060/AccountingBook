@@ -1,14 +1,14 @@
 package tw.idv.louislee.accountingbook.component.scanner
 
 import com.google.mlkit.vision.barcode.common.Barcode
-import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcode
-import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeEncoding
-import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceProductDto
+import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceBarcodeEncoding
+import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeDto
+import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceProductParcelableDto
 import java.nio.charset.Charset
 import java.time.LocalDate
 
 object ElectronicInvoiceBarcodeParser {
-    fun parse(barcodes: List<Barcode>): ElectronicInvoiceBarcode? {
+    fun parse(barcodes: List<Barcode>): ElectronicInvoiceBarcodeDto? {
         if (barcodes.size != 2) {
             return null
         }
@@ -28,18 +28,30 @@ object ElectronicInvoiceBarcodeParser {
         }
 
         val encoding = parseEncoding(barcode = leftBarcode.displayValue ?: "")
-        val barcode = when (encoding) {
-            ElectronicInvoiceBarcodeEncoding.BIG_5 ->
-                String(leftBarcode.rawBytes ?: byteArrayOf(), Charset.forName("BIG5")) +
-                        String(
-                            rightBarcode.rawBytes ?: byteArrayOf(),
-                            Charset.forName("BIG5")
-                        ).substring(2)
+        val leftBarcodeRawText: String
+        val rightBarcodeRawText: String
+        when (encoding) {
+            ElectronicInvoiceBarcodeEncoding.BIG_5 -> {
+                leftBarcodeRawText = String(
+                    leftBarcode.rawBytes ?: byteArrayOf(),
+                    Charset.forName("BIG5")
+                )
+                rightBarcodeRawText = String(
+                    rightBarcode.rawBytes ?: byteArrayOf(),
+                    Charset.forName("BIG5")
+                )
+            }
 
-            else -> (leftBarcode.displayValue ?: "") +
-                    rightBarcode.displayValue!!.substring(2)
+            else -> {
+                leftBarcodeRawText = leftBarcode.displayValue ?: ""
+                rightBarcodeRawText = rightBarcode.displayValue ?: ""
+            }
         }
-        return parse(barcode, encoding)
+        return parse(
+            leftBarcode = leftBarcodeRawText,
+            rightBarcode = rightBarcodeRawText,
+            encoding = encoding
+        )
     }
 
     private fun parseEncoding(barcode: String): ElectronicInvoiceBarcodeEncoding {
@@ -49,12 +61,16 @@ object ElectronicInvoiceBarcodeParser {
     }
 
     private fun parse(
-        barcode: String,
+        leftBarcode: String,
+        rightBarcode: String,
         encoding: ElectronicInvoiceBarcodeEncoding
-    ): ElectronicInvoiceBarcode {
+    ): ElectronicInvoiceBarcodeDto {
+        val barcode = leftBarcode + rightBarcode.substring(2)
         val secondAreaInformation = parseSecondAreaInformation(barcode.substring(89))
 
-        return ElectronicInvoiceBarcode(
+        return ElectronicInvoiceBarcodeDto(
+            leftBarcode = leftBarcode,
+            rightBarcode = rightBarcode,
             invoiceNumber = barcode.substring(0, 10),
             date = parseTaiwaneseDate(barcode.substring(10, 17)),
             randomCode = barcode.substring(17, 21),
@@ -89,11 +105,11 @@ object ElectronicInvoiceBarcodeParser {
         )
     }
 
-    private fun parseProducts(barcodeColumns: List<String>): List<ElectronicInvoiceProductDto> {
+    private fun parseProducts(barcodeColumns: List<String>): List<ElectronicInvoiceProductParcelableDto> {
         // 略過前面三個，分別是qr code產品數、發票產品數、編碼
         // 之後才是商品資訊
         val productFirstIndex = 3
-        val result = mutableListOf<ElectronicInvoiceProductDto>()
+        val result = mutableListOf<ElectronicInvoiceProductParcelableDto>()
 
         for (i in productFirstIndex until barcodeColumns.size step 3) {
             if (barcodeColumns.size - i < 3) {
@@ -101,7 +117,7 @@ object ElectronicInvoiceBarcodeParser {
             }
 
             result.add(
-                ElectronicInvoiceProductDto(
+                ElectronicInvoiceProductParcelableDto(
                     name = barcodeColumns[i],
                     count = barcodeColumns[i + 1].toDouble(),
                     unitPrice = barcodeColumns[i + 2].toDouble()
@@ -133,7 +149,7 @@ private data class ElectronicInvoiceBarcodeSecondArea(
     /**
      * 商品清單
      */
-    val products: List<ElectronicInvoiceProductDto>,
+    val products: List<ElectronicInvoiceProductParcelableDto>,
     /**
      * 營業人的補充資訊
      */

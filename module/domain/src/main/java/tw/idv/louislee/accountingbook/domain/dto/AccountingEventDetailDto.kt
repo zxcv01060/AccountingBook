@@ -11,6 +11,7 @@ data class AccountingEventDetailDto(
     val price: Long,
     val recordDate: ZonedDateTime,
     val note: String?,
+    val invoice: ElectronicInvoiceDto?,
     val createDate: ZonedDateTime,
     val lastUpdateDate: ZonedDateTime
 ) {
@@ -22,6 +23,7 @@ data class AccountingEventDetailDto(
                 type = AccountingEventType.UNKNOWN_EXPENSES,
                 price = 0,
                 note = null,
+                invoice = null,
                 recordDate = ZonedDateTime.of(
                     2023, 4, 9,
                     20, 14, 28,

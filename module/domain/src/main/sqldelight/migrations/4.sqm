@@ -1,0 +1,104 @@
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceBarcodeEncoding;
+
+-- 1. 新增Invoice資料表
+CREATE TABLE Invoice(
+    -- 發票號碼
+    id TEXT NOT NULL PRIMARY KEY,
+    -- 發票開立日期
+    date INTEGER AS LocalDate NOT NULL,
+    -- 隨機碼
+    randomCode TEXT NOT NULL,
+    -- 未稅的銷售額
+    untaxedPrice INTEGER,
+    -- 銷售額
+    price INTEGER NOT NULL,
+    -- 買方的統一編號
+    buyerUnifiedBusinessNumber TEXT,
+    -- 賣方的統一編號
+    sellerUnifiedBusinessNumber TEXT NOT NULL,
+    -- 加密驗證資訊
+    verificationInformation TEXT NOT NULL,
+    -- 營業人自行使用區
+    sellerCustomInformation TEXT,
+    -- 左右條碼上面記載的商品數
+    qrCodeProductCount INTEGER NOT NULL,
+    -- 發票上的商品數
+    invoiceProductCount INTEGER NOT NULL,
+    -- 商品資訊的編碼
+    encoding INTEGER AS ElectronicInvoiceBarcodeEncoding NOT NULL,
+    -- 營業人的補充資訊
+    additionalInformation TEXT,
+    -- 左側條碼掃出來的文字，編碼固定是UTF-8
+    leftBarcode TEXT NOT NULL,
+    -- 右側條碼掃出來的文字，編碼固定是UTF-8
+    rightBarcode TEXT NOT NULL,
+    -- 建立日期
+    createDate INTEGER AS ZonedDateTime NOT NULL
+);
+
+CREATE TABLE InvoiceProduct(
+    -- 流水編號
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    -- 發票號碼
+    invoiceId TEXT NOT NULL,
+    -- 商品名稱
+    name TEXT NOT NULL,
+    -- 單價
+    unitPrice REAL NOT NULL,
+    -- 數量
+    count REAL NOT NULL,
+    FOREIGN KEY(invoiceId) REFERENCES Invoice(id)
+);
+
+-- 2. AccountingEvent新增invoice_id欄位
+
+-- 暫存表
+CREATE TABLE AccountingEventTemp(
+    -- 編號
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    -- 帳戶編號
+    accountId INTEGER NOT NULL,
+    -- 發票號碼
+    invoiceId TEXT,
+    -- 帳戶餘額，扣除或加上金額後的餘額
+    balance INTEGER NOT NULL,
+    -- 金額
+    price INTEGER NOT NULL,
+    -- 是否為收入(0: 支出/ 1: 收入)
+    isIncome INTEGER AS Boolean NOT NULL DEFAULT 0,
+    -- 類型
+    type INTEGER AS AccountingEventType NOT NULL,
+    -- 備註
+    note TEXT,
+    -- 紀錄日期
+    recordDate INTEGER AS ZonedDateTime NOT NULL,
+    -- 建立日期
+    createDate INTEGER AS ZonedDateTime NOT NULL,
+    -- 最後更新日期
+    lastUpdateDate INTEGER AS ZonedDateTime NOT NULL,
+    FOREIGN KEY(accountId) REFERENCES Account(id),
+    FOREIGN KEY(invoiceId) REFERENCES Invoice(id)
+);
+
+INSERT INTO AccountingEventTemp(
+    id,
+    accountId,
+    invoiceId,
+    balance,
+    price,
+    isIncome,
+    type,
+    note,
+    recordDate,
+    createDate,
+    lastUpdateDate
+)
+SELECT id, accountId, NULL, balance, price, isIncome, type, note, createDate, createDate, lastUpdateDate
+FROM AccountingEvent;
+
+DROP TABLE AccountingEvent;
+
+ALTER TABLE AccountingEventTemp
+RENAME TO AccountingEvent;

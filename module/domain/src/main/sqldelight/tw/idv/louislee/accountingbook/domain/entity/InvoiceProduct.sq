@@ -1,0 +1,18 @@
+CREATE TABLE InvoiceProduct(
+    -- 流水編號
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    -- 發票號碼
+    invoiceId TEXT NOT NULL,
+    -- 商品名稱
+    name TEXT NOT NULL,
+    -- 單價
+    unitPrice REAL NOT NULL,
+    -- 數量
+    count REAL NOT NULL,
+    FOREIGN KEY(invoiceId) REFERENCES Invoice(id)
+);
+
+findByInvoiceId:
+SELECT *
+FROM InvoiceProduct
+WHERE invoiceId = ?;

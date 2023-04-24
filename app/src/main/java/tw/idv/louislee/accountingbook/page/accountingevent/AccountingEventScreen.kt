@@ -1,5 +1,8 @@
 package tw.idv.louislee.accountingbook.page.accountingevent
 
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,12 +13,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -27,8 +35,11 @@ import tw.idv.louislee.accountingbook.component.AppToolbarLayout
 import tw.idv.louislee.accountingbook.component.PriceText
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
+import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeDto
+import tw.idv.louislee.accountingbook.extension.getParcelableExtraCompat
 import tw.idv.louislee.accountingbook.extension.startActivity
 import tw.idv.louislee.accountingbook.extension.textId
+import tw.idv.louislee.accountingbook.page.ElectronicInvoiceScannerActivity
 import tw.idv.louislee.accountingbook.page.accountingevent.add.AccountingEventAddActivity
 import tw.idv.louislee.accountingbook.page.accountingevent.detail.AccountingEventDetailActivity
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
@@ -53,11 +64,51 @@ fun AccountingEventScreen(events: List<AccountingEventDto>) {
             title = stringResource(id = R.string.accounting_event_list_title),
             actions = {
                 val context = LocalContext.current
+                var barcode by remember {
+                    mutableStateOf<ElectronicInvoiceBarcodeDto?>(null)
+                }
+                if (barcode != null) {
+                    context.startActivity<AccountingEventAddActivity> {
+                        putExtra(
+                            AccountingEventAddActivity.INTENT_ELECTRONIC_INVOICE_BARCODE,
+                            barcode
+                        )
+                    }
+                }
+                val electronicInvoiceBarcodeScannerLauncher = rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.StartActivityForResult(),
+                    onResult = {
+                        barcode = it.data?.getParcelableExtraCompat<ElectronicInvoiceBarcodeDto>(
+                            ElectronicInvoiceScannerActivity.INTENT_BARCODE
+                        )
+                    }
+                )
+                var isExpanded by remember {
+                    mutableStateOf(false)
+                }
 
-                IconButton(onClick = { context.startActivity<AccountingEventAddActivity>() }) {
+                IconButton(onClick = { isExpanded = true }) {
                     Icon(
                         imageVector = Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.common_add)
+                    )
+                }
+                DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+                    DropdownMenuItem(
+                        text = { Text("手動輸入") },
+                        onClick = {
+                            context.startActivity<AccountingEventAddActivity>()
+                            isExpanded = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(text = "掃描發票") },
+                        onClick = {
+                            electronicInvoiceBarcodeScannerLauncher.launch(
+                                Intent(context, ElectronicInvoiceScannerActivity::class.java)
+                            )
+                            isExpanded = false
+                        }
                     )
                 }
             }

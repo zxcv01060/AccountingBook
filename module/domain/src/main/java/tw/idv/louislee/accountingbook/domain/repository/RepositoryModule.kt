@@ -10,4 +10,10 @@ internal class RepositoryModule {
 
     @Single
     fun accountQuery(database: AccountingBookDatabase) = database.accountQueries
+
+    @Single
+    fun invoiceQuery(database: AccountingBookDatabase) = database.invoiceQueries
+
+    @Single
+    fun invoiceProductQuery(database: AccountingBookDatabase) = database.invoiceProductQueries
 }

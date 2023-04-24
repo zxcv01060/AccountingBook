@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,6 +34,9 @@ import org.koin.androidx.viewmodel.ext.android.getViewModel
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.component.AppToolbarLayout
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDetailDto
+import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceBarcodeEncoding
+import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceDto
+import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceProductDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.dto.parcelable
 import tw.idv.louislee.accountingbook.extension.finish
@@ -43,6 +47,7 @@ import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 import tw.idv.louislee.accountingbook.utils.AppDateFormatter
 import tw.idv.louislee.accountingbook.utils.AppDateFormatterImpl
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -208,6 +213,8 @@ private fun AccountingEventDetail(
                 Text(modifier = Modifier.fillMaxWidth(), text = row.content)
             }
         }
+
+        InvoiceDetail(invoice = event.invoice, dateFormatter = dateFormatter)
     }
 }
 
@@ -232,6 +239,88 @@ private fun EventNotFoundDialog(id: Long) {
     )
 }
 
+@Composable
+fun InvoiceDetail(invoice: ElectronicInvoiceDto?, dateFormatter: AppDateFormatter) {
+    if (invoice == null) {
+        return
+    }
+
+    data class InvoiceRow(val label: String, val content: String)
+
+    val rows = arrayOf(
+        InvoiceRow(
+            label = stringResource(id = R.string.electronic_invoice_invoice_number),
+            content = invoice.invoiceNumber
+        ),
+        InvoiceRow(
+            label = stringResource(id = R.string.electronic_invoice_date),
+            content = dateFormatter.formatDate(invoice.date)
+        ),
+        InvoiceRow(
+            label = stringResource(id = R.string.electronic_invoice_price),
+            content = stringResource(id = R.string.common_price, invoice.price)
+        ),
+        InvoiceRow(
+            label = stringResource(id = R.string.electronic_invoice_invoice_product_count),
+            content = invoice.invoiceProductCount.toString()
+        )
+    )
+
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        for (row in rows) {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(text = row.label)
+
+                Text(text = row.content)
+            }
+        }
+
+        InvoiceProductTable(products = invoice.products)
+    }
+}
+
+@Composable
+fun InvoiceProductTable(products: List<ElectronicInvoiceProductDto>) {
+    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        Column(
+            modifier = Modifier.weight(weight = 4f),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(text = stringResource(id = R.string.electronic_invoice_product_name))
+            for (product in products) {
+                Text(text = product.name)
+            }
+        }
+        Column(
+            modifier = Modifier.weight(weight = 2f),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(text = stringResource(id = R.string.electronic_invoice_product_unit_price))
+            for (product in products) {
+                Text(text = stringResource(id = R.string.common_price, product.unitPrice))
+            }
+        }
+        Column(
+            modifier = Modifier.weight(weight = 2f),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(text = stringResource(id = R.string.electronic_invoice_product_count))
+            for (product in products) {
+                Text(text = product.count.toString())
+            }
+        }
+        Column(
+            modifier = Modifier.weight(weight = 2f),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(text = stringResource(id = R.string.electronic_invoice_product_total_price))
+            for (product in products) {
+                Text(text = stringResource(id = R.string.common_price, product.totalPrice))
+            }
+        }
+    }
+}
+
 @AppPreview
 @Composable
 private fun Preview() {
@@ -243,6 +332,30 @@ private fun Preview() {
             type = AccountingEventType.FOOD_OR_DRINK,
             price = 35,
             note = "早餐 巧克力吐司 + 奶茶",
+            invoice = ElectronicInvoiceDto(
+                leftBarcode = "",
+                rightBarcode = "",
+                invoiceNumber = "MF37884541",
+                date = LocalDate.of(2023, 4, 3),
+                randomCode = "2469",
+                untaxedPrice = null,
+                price = 111,
+                buyerUnifiedBusinessNumber = null,
+                sellerUnifiedBusinessNumber = "40020690",
+                verificationInformation = "",
+                sellerCustomInformation = null,
+                qrCodeProductCount = 1,
+                invoiceProductCount = 1,
+                encoding = ElectronicInvoiceBarcodeEncoding.BIG_5,
+                products = listOf(
+                    ElectronicInvoiceProductDto(
+                        name = "92無鉛汽油",
+                        unitPrice = 3.29,
+                        count = 1.298
+                    )
+                ),
+                additionalInformation = ""
+            ),
             recordDate = ZonedDateTime.of(
                 2023, 5, 29,
                 7, 29, 43, 0,

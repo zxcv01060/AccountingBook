@@ -1,17 +1,21 @@
 package tw.idv.louislee.accountingbook.domain.service
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import org.koin.core.annotation.Single
+import tw.idv.louislee.accountingbook.domain.dto.account.AccountAccountingEventItemDto
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDetailDto
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountFormDto
 import tw.idv.louislee.accountingbook.domain.entity.Account
-import tw.idv.louislee.accountingbook.domain.extension.toDetail
 import tw.idv.louislee.accountingbook.domain.repository.AccountRepository
 import tw.idv.louislee.accountingbook.domain.repository.AccountingEventRepository
+import tw.idv.louislee.accountingbook.domain.repository.InvoiceProductRepository
+import tw.idv.louislee.accountingbook.domain.repository.InvoiceRepository
 import kotlin.coroutines.CoroutineContext
 
 interface AccountService {
@@ -25,7 +29,9 @@ interface AccountService {
 @Single
 internal class AccountServiceImpl(
     private val repository: AccountRepository,
-    private val accountingEventRepository: AccountingEventRepository
+    private val accountingEventRepository: AccountingEventRepository,
+    private val invoiceRepository: InvoiceRepository,
+    private val invoiceProductRepository: InvoiceProductRepository
 ) : AccountService {
     override fun findAll(context: CoroutineContext): Flow<List<AccountDto>> =
         repository.findAll(context)
@@ -41,10 +47,7 @@ internal class AccountServiceImpl(
     override fun findById(id: Long, context: CoroutineContext): Flow<AccountDetailDto?> =
         repository.findById(id = id, context = context)
             .combine(
-                accountingEventRepository.findByAccountId(
-                    accountId = id,
-                    context = context
-                )
+                findAccountingEventDetails(id = id, context = context)
             ) { account, accountingEvents ->
                 if (account == null) {
                     return@combine null
@@ -57,9 +60,27 @@ internal class AccountServiceImpl(
                     balance = account.balance,
                     createDate = account.createDate,
                     lastUpdateDate = account.lastUpdateDate,
-                    accountingEvents = accountingEvents.map { it.toDetail() }
+                    accountingEvents = accountingEvents
                 )
             }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun findAccountingEventDetails(
+        id: Long,
+        context: CoroutineContext
+    ): Flow<List<AccountAccountingEventItemDto>> {
+        return accountingEventRepository.findByAccountId(accountId = id, context = context)
+            .mapLatest { events ->
+                events.map {
+                    AccountAccountingEventItemDto(
+                        id = it.id,
+                        price = it.price,
+                        note = it.note,
+                        recordDate = it.recordDate
+                    )
+                }
+            }
+    }
 
     override fun add(account: AccountFormDto) = repository.add(account)
 }

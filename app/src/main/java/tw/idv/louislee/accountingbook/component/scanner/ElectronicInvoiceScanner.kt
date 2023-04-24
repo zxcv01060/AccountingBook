@@ -40,7 +40,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import tw.idv.louislee.accountingbook.AndroidLogger
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.domain.Logger
-import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcode
+import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeDto
 import tw.idv.louislee.accountingbook.extension.finish
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
@@ -51,7 +51,7 @@ import java.time.format.DateTimeFormatter
 fun ElectronicInvoiceScanner(
     logger: Logger,
     onCameraPermissionDenied: () -> Unit,
-    onScan: (electronicInvoiceBarcode: ElectronicInvoiceBarcode) -> Unit,
+    onScan: (electronicInvoiceBarcode: ElectronicInvoiceBarcodeDto) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
@@ -86,7 +86,7 @@ fun ElectronicInvoiceScanner(
 private fun Content(
     modifier: Modifier,
     logger: Logger,
-    onScan: (electronicInvoiceBarcode: ElectronicInvoiceBarcode) -> Unit
+    onScan: (electronicInvoiceBarcode: ElectronicInvoiceBarcodeDto) -> Unit
 ) {
     AndroidView(
         modifier = Modifier.size(width = 200.dp, height = 200.dp) then modifier,
@@ -97,7 +97,7 @@ private fun Content(
 private fun createCameraView(
     logger: Logger,
     context: Context,
-    onScan: (electronicInvoiceBarcode: ElectronicInvoiceBarcode) -> Unit
+    onScan: (electronicInvoiceBarcode: ElectronicInvoiceBarcodeDto) -> Unit
 ): View {
     val previewView = PreviewView(context).also {
         it.scaleType = PreviewView.ScaleType.FILL_CENTER
@@ -141,7 +141,7 @@ private fun PreviewScanner() {
     AccountingBookTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             var electronicInvoiceBarcode by remember {
-                mutableStateOf<ElectronicInvoiceBarcode?>(null)
+                mutableStateOf<ElectronicInvoiceBarcodeDto?>(null)
             }
 
             if (electronicInvoiceBarcode == null) {

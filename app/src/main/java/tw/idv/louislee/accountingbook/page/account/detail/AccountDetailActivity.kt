@@ -28,10 +28,9 @@ import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.component.AppToolbarLayout
-import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDetailDto
+import tw.idv.louislee.accountingbook.domain.dto.account.AccountAccountingEventItemDto
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDetailDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountType
-import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.extension.finish
 import tw.idv.louislee.accountingbook.extension.titleId
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
@@ -158,7 +157,7 @@ private fun AccountDetailBlock(account: AccountDetailDto, dateFormatter: AppDate
 
 @Composable
 private fun AccountingEventColumn(
-    accountingEvents: List<AccountingEventDetailDto>,
+    accountingEvents: List<AccountAccountingEventItemDto>,
     dateFormatter: AppDateFormatter
 ) {
     Text(text = stringResource(id = R.string.accounting_event))
@@ -202,45 +201,21 @@ private fun Preview() {
             name = "現金",
             balance = 2319,
             accountingEvents = listOf(
-                AccountingEventDetailDto(
+                AccountAccountingEventItemDto(
                     id = 2,
-                    accountId = 1,
-                    type = AccountingEventType.FOOD_OR_DRINK,
                     price = -500,
                     note = "早餐",
                     recordDate = ZonedDateTime.of(
                         2023, 4, 16,
                         7, 5, 41, 0,
                         ZoneId.systemDefault()
-                    ),
-                    createDate = ZonedDateTime.of(
-                        2023, 4, 16,
-                        7, 5, 41, 0,
-                        ZoneId.systemDefault()
-                    ),
-                    lastUpdateDate = ZonedDateTime.of(
-                        2023, 4, 16,
-                        7, 5, 41, 0,
-                        ZoneId.systemDefault()
                     )
                 ),
-                AccountingEventDetailDto(
+                AccountAccountingEventItemDto(
                     id = 1,
-                    accountId = 1,
-                    type = AccountingEventType.UNKNOWN_INCOME,
                     price = 2819,
                     note = "現有金額",
                     recordDate = ZonedDateTime.of(
-                        2023, 4, 15,
-                        10, 6, 29, 0,
-                        ZoneId.systemDefault()
-                    ),
-                    createDate = ZonedDateTime.of(
-                        2023, 4, 15,
-                        10, 6, 29, 0,
-                        ZoneId.systemDefault()
-                    ),
-                    lastUpdateDate = ZonedDateTime.of(
                         2023, 4, 15,
                         10, 6, 29, 0,
                         ZoneId.systemDefault()

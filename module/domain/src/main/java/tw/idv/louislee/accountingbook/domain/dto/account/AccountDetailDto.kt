@@ -1,6 +1,5 @@
 package tw.idv.louislee.accountingbook.domain.dto.account
 
-import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDetailDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountType
 import java.time.ZonedDateTime
 
@@ -9,7 +8,14 @@ data class AccountDetailDto(
     val type: AccountType,
     val name: String,
     val balance: Long,
-    val accountingEvents: List<AccountingEventDetailDto>,
+    val accountingEvents: List<AccountAccountingEventItemDto>,
     val createDate: ZonedDateTime,
     val lastUpdateDate: ZonedDateTime
+)
+
+data class AccountAccountingEventItemDto(
+    val id: Long,
+    val price: Long,
+    val note: String?,
+    val recordDate: ZonedDateTime
 )

@@ -7,9 +7,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Single
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventFormDto
+import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountQueries
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEvent
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventQueries
+import tw.idv.louislee.accountingbook.domain.entity.Invoice
+import tw.idv.louislee.accountingbook.domain.entity.InvoiceQueries
 import tw.idv.louislee.accountingbook.domain.utils.DateTimeProvider
 import kotlin.coroutines.CoroutineContext
 
@@ -23,7 +26,7 @@ internal interface AccountingEventRepository {
         context: CoroutineContext = Dispatchers.Default
     ): Flow<List<AccountingEvent>>
 
-    fun add(event: AccountingEventFormDto)
+    fun add(event: AccountingEventFormDto, electronicInvoice: ElectronicInvoiceDto?)
 
     fun delete(id: Long)
 
@@ -34,7 +37,8 @@ internal interface AccountingEventRepository {
 internal class AccountingEventRepositoryImpl(
     private val dateTimeProvider: DateTimeProvider,
     private val query: AccountingEventQueries,
-    private val accountQuery: AccountQueries
+    private val accountQuery: AccountQueries,
+    private val invoiceQuery: InvoiceQueries
 ) : AccountingEventRepository {
     override fun findAll(context: CoroutineContext): Flow<List<AccountingEvent>> =
         query.findAll()
@@ -53,25 +57,50 @@ internal class AccountingEventRepositoryImpl(
         .asFlow()
         .mapToList(context)
 
-    override fun add(event: AccountingEventFormDto) = query.transaction {
-        val price = if (event.type.isIncome) {
-            event.price
-        } else {
-            -event.price
-        }
-        val newBalance = updateAccountBalance(accountId = event.accountId, balanceInterval = price)
+    override fun add(event: AccountingEventFormDto, electronicInvoice: ElectronicInvoiceDto?) =
+        query.transaction {
+            val price = if (event.type.isIncome) {
+                event.price
+            } else {
+                -event.price
+            }
+            val newBalance =
+                updateAccountBalance(accountId = event.accountId, balanceInterval = price)
 
-        query.add(
-            accountId = event.accountId,
-            type = event.type,
-            isIncome = event.type.isIncome,
-            price = price,
-            balance = newBalance,
-            note = event.note,
-            recordDate = event.recordDate ?: dateTimeProvider.now,
-            createDate = dateTimeProvider.now
-        )
-    }
+            if (electronicInvoice != null) {
+                invoiceQuery.add(
+                    Invoice(
+                        id = electronicInvoice.invoiceNumber,
+                        date = electronicInvoice.date,
+                        randomCode = electronicInvoice.randomCode,
+                        untaxedPrice = electronicInvoice.untaxedPrice,
+                        price = electronicInvoice.price,
+                        buyerUnifiedBusinessNumber = electronicInvoice.buyerUnifiedBusinessNumber,
+                        sellerUnifiedBusinessNumber = electronicInvoice.sellerUnifiedBusinessNumber,
+                        verificationInformation = electronicInvoice.verificationInformation,
+                        sellerCustomInformation = electronicInvoice.sellerCustomInformation,
+                        qrCodeProductCount = electronicInvoice.qrCodeProductCount.toLong(),
+                        invoiceProductCount = electronicInvoice.invoiceProductCount.toLong(),
+                        encoding = electronicInvoice.encoding,
+                        additionalInformation = electronicInvoice.additionalInformation,
+                        leftBarcode = electronicInvoice.leftBarcode,
+                        rightBarcode = electronicInvoice.rightBarcode,
+                        createDate = dateTimeProvider.now,
+                    )
+                )
+            }
+            query.add(
+                accountId = event.accountId,
+                invoiceId = electronicInvoice?.invoiceNumber,
+                type = event.type,
+                isIncome = event.type.isIncome,
+                price = price,
+                balance = newBalance,
+                note = event.note,
+                recordDate = event.recordDate ?: dateTimeProvider.now,
+                createDate = dateTimeProvider.now
+            )
+        }
 
     private fun updateAccountBalance(accountId: Long, balanceInterval: Long): Long {
         val accountBalance = accountQuery.findBalanceById(id = accountId).executeAsOne()
@@ -133,6 +162,7 @@ internal class AccountingEventRepositoryImpl(
         query.updateById(
             id = id,
             accountId = event.accountId,
+            invoiceId = event.invoiceId,
             type = event.type,
             isIncome = event.type.isIncome,
             price = price,
