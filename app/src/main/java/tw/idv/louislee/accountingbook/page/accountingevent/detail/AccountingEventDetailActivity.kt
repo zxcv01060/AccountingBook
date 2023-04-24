@@ -297,7 +297,7 @@ fun InvoiceProductTable(products: List<ElectronicInvoiceProductDto>) {
         ) {
             Text(text = stringResource(id = R.string.electronic_invoice_product_unit_price))
             for (product in products) {
-                Text(text = stringResource(id = R.string.common_price, product.unitPrice))
+                Text(text = stringResource(id = R.string.common_float_price, product.unitPrice))
             }
         }
         Column(
@@ -315,7 +315,7 @@ fun InvoiceProductTable(products: List<ElectronicInvoiceProductDto>) {
         ) {
             Text(text = stringResource(id = R.string.electronic_invoice_product_total_price))
             for (product in products) {
-                Text(text = stringResource(id = R.string.common_price, product.totalPrice))
+                Text(text = stringResource(id = R.string.common_float_price, product.totalPrice))
             }
         }
     }

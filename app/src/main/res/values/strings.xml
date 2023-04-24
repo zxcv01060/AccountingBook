@@ -4,6 +4,7 @@
     <!-- 通用 -->
     <string name="common_add">新增</string>
     <string name="common_price">$ %1$,d</string>
+    <string name="common_float_price">$ %1$,.2f</string>
     <string name="common_back">返回</string>
     <string name="common_submit">送出</string>
     <string name="common_ok">確認</string>
