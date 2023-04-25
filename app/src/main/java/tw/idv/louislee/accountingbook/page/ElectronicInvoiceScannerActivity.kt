@@ -1,9 +1,14 @@
 package tw.idv.louislee.accountingbook.page
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -24,8 +29,32 @@ import tw.idv.louislee.accountingbook.component.scanner.ElectronicInvoiceScanner
 import tw.idv.louislee.accountingbook.domain.Logger
 import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeDto
 import tw.idv.louislee.accountingbook.extension.finish
+import tw.idv.louislee.accountingbook.extension.getParcelableExtraCompat
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
+
+@Composable
+fun rememberElectronicInvoiceScannerLauncher(
+    onScan: (ElectronicInvoiceBarcodeDto?) -> Unit,
+    onFailed: () -> Unit = {}
+): ManagedActivityResultLauncher<Intent, ActivityResult> {
+    val context = LocalContext.current
+
+    return rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {
+            if (it.resultCode == Activity.RESULT_OK) {
+                onScan(
+                    it.data?.getParcelableExtraCompat(
+                        ElectronicInvoiceScannerActivity.INTENT_BARCODE
+                    )
+                )
+            } else {
+                onFailed()
+            }
+        }
+    )
+}
 
 class ElectronicInvoiceScannerActivity : ComponentActivity() {
     companion object {

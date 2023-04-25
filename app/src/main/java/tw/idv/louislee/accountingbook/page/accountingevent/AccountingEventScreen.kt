@@ -1,8 +1,6 @@
 package tw.idv.louislee.accountingbook.page.accountingevent
 
 import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,13 +33,12 @@ import tw.idv.louislee.accountingbook.component.AppToolbarLayout
 import tw.idv.louislee.accountingbook.component.PriceText
 import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
-import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeDto
-import tw.idv.louislee.accountingbook.extension.getParcelableExtraCompat
 import tw.idv.louislee.accountingbook.extension.startActivity
 import tw.idv.louislee.accountingbook.extension.textId
 import tw.idv.louislee.accountingbook.page.ElectronicInvoiceScannerActivity
 import tw.idv.louislee.accountingbook.page.accountingevent.add.AccountingEventAddActivity
 import tw.idv.louislee.accountingbook.page.accountingevent.detail.AccountingEventDetailActivity
+import tw.idv.louislee.accountingbook.page.rememberElectronicInvoiceScannerLauncher
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
 
@@ -64,22 +61,19 @@ fun AccountingEventScreen(events: List<AccountingEventDto>) {
             title = stringResource(id = R.string.accounting_event_list_title),
             actions = {
                 val context = LocalContext.current
-                val electronicInvoiceBarcodeScannerLauncher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.StartActivityForResult(),
-                    onResult = {
+                val scannerLauncher = rememberElectronicInvoiceScannerLauncher(
+                    onScan = {
                         context.startActivity<AccountingEventAddActivity> {
                             putExtra(
                                 AccountingEventAddActivity.INTENT_ELECTRONIC_INVOICE_BARCODE,
-                                it.data?.getParcelableExtraCompat<ElectronicInvoiceBarcodeDto>(
-                                    ElectronicInvoiceScannerActivity.INTENT_BARCODE
-                                )
+                                it
                             )
                         }
                     }
                 )
 
                 AddAccountingEventButton(requestLaunchInvoiceScanner = {
-                    electronicInvoiceBarcodeScannerLauncher.launch(
+                    scannerLauncher.launch(
                         Intent(context, ElectronicInvoiceScannerActivity::class.java)
                     )
                 })
