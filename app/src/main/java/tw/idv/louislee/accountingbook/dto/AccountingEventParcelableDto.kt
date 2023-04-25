@@ -2,7 +2,7 @@ package tw.idv.louislee.accountingbook.dto
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDetailDto
+import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventDetailDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import java.time.ZonedDateTime
 

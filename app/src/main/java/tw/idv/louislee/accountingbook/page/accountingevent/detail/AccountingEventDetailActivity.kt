@@ -33,10 +33,10 @@ import org.koin.androidx.compose.get
 import org.koin.androidx.viewmodel.ext.android.getViewModel
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.component.AppToolbarLayout
-import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDetailDto
 import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceBarcodeEncoding
 import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceProductDto
+import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventDetailDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.domain.utils.AppDateFormatter
 import tw.idv.louislee.accountingbook.dto.parcelable

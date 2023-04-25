@@ -31,7 +31,7 @@ import org.koin.androidx.compose.getViewModel
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.component.AppToolbarLayout
 import tw.idv.louislee.accountingbook.component.PriceText
-import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDto
+import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.extension.startActivity
 import tw.idv.louislee.accountingbook.extension.textId

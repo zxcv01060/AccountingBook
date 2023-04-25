@@ -1,4 +1,4 @@
-package tw.idv.louislee.accountingbook.domain.dto
+package tw.idv.louislee.accountingbook.domain.dto.accountingevent
 
 import tw.idv.louislee.accountingbook.domain.DomainConstant
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType

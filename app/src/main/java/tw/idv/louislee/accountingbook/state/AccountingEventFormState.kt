@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import tw.idv.louislee.accountingbook.domain.DomainConstant
-import tw.idv.louislee.accountingbook.domain.dto.AccountingEventFormDto
+import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventFormDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import java.time.ZonedDateTime
 

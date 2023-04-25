@@ -21,7 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import tw.idv.louislee.accountingbook.AppScreen
-import tw.idv.louislee.accountingbook.domain.dto.AccountingEventDto
+import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.page.account.AccountScreen
 import tw.idv.louislee.accountingbook.page.accountingevent.AccountingEventScreen
