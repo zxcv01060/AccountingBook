@@ -1,6 +1,6 @@
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
-import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceBarcodeEncoding;
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeEncoding;
 
 CREATE TABLE Invoice(
     -- 發票號碼

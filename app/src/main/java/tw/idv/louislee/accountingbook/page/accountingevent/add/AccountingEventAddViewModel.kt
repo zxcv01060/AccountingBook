@@ -10,7 +10,7 @@ import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import tw.idv.louislee.accountingbook.domain.service.AccountService
 import tw.idv.louislee.accountingbook.domain.service.AccountingEventService
 import tw.idv.louislee.accountingbook.domain.utils.AppDateFormatter
-import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeDto
+import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceParcelableDto
 import tw.idv.louislee.accountingbook.state.AccountingEventFormState
 import java.time.LocalTime
 import java.time.ZoneId
@@ -21,7 +21,7 @@ class AccountingEventAddViewModel(
     private val accountingEventService: AccountingEventService,
     private val accountService: AccountService,
     private val dateFormatter: AppDateFormatter,
-    @InjectedParam private val barcode: ElectronicInvoiceBarcodeDto?
+    @InjectedParam private val barcode: ElectronicInvoiceParcelableDto?
 ) : ViewModel() {
     val state = if (barcode == null) {
         AccountingEventFormState()

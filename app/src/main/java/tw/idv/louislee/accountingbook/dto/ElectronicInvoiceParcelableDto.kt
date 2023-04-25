@@ -7,8 +7,28 @@ import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceProductDto
 import java.time.LocalDate
 
+val ElectronicInvoiceDto.parcelable
+    get() = ElectronicInvoiceParcelableDto(
+        leftBarcode = leftBarcode,
+        rightBarcode = rightBarcode,
+        invoiceNumber = invoiceNumber,
+        date = date,
+        randomCode = randomCode,
+        untaxedPrice = untaxedPrice,
+        price = price,
+        buyerUnifiedBusinessNumber = buyerUnifiedBusinessNumber,
+        sellerUnifiedBusinessNumber = sellerUnifiedBusinessNumber,
+        verificationInformation = verificationInformation,
+        sellerCustomInformation = sellerCustomInformation,
+        qrCodeProductCount = qrCodeProductCount,
+        invoiceProductCount = invoiceProductCount,
+        encoding = encoding,
+        products = products.map { it.parcelable },
+        additionalInformation = additionalInformation
+    )
+
 @Parcelize
-data class ElectronicInvoiceBarcodeDto(
+data class ElectronicInvoiceParcelableDto(
     /**
      * 左邊條碼的文字內容，編碼固定為UTF-8
      */
@@ -72,7 +92,7 @@ data class ElectronicInvoiceBarcodeDto(
     /**
      * 營業人的補充資訊
      */
-    val additionalInformation: String
+    val additionalInformation: String?
 ) : Parcelable {
     val form
         get() = ElectronicInvoiceDto(
@@ -91,7 +111,7 @@ data class ElectronicInvoiceBarcodeDto(
             invoiceProductCount = invoiceProductCount,
             encoding = encoding,
             products = products.map { it.form },
-            additionalInformation = additionalInformation,
+            additionalInformation = additionalInformation
         )
 }
 

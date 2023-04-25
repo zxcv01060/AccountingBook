@@ -46,7 +46,7 @@ import tw.idv.louislee.accountingbook.extension.textId
 import tw.idv.louislee.accountingbook.page.accountingevent.edit.AccountingEventEditActivity
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
-import tw.idv.louislee.accountingbook.utils.AppDateFormatterImpl
+import tw.idv.louislee.accountingbook.utils.AndroidAppDateFormatter
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -372,6 +372,6 @@ private fun Preview() {
                 ZoneId.of("Asia/Taipei")
             )
         ),
-        dateFormatter = AppDateFormatterImpl(context = LocalContext.current)
+        dateFormatter = AndroidAppDateFormatter(context = LocalContext.current)
     )
 }

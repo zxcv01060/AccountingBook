@@ -26,6 +26,7 @@ object Version {
     const val CAMERA_X_ML_KIT_VISION = "1.3.0-alpha05"
 
     const val ML_KIT_BARCODE_SCANNING = "17.1.0"
+    const val ML_KIT_BARCODE_SCANNING_COMMON = "17.0.0"
 
     /**
      * Google Jetpack Compose Permission

@@ -29,7 +29,7 @@ import tw.idv.louislee.accountingbook.domain.DomainConstant
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountType
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
-import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeDto
+import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceParcelableDto
 import tw.idv.louislee.accountingbook.extension.finish
 import tw.idv.louislee.accountingbook.extension.getParcelableExtraCompat
 import tw.idv.louislee.accountingbook.page.accountingevent.form.AccountingEventForm
@@ -43,7 +43,7 @@ class AccountingEventAddActivity : ComponentActivity() {
             "AccountingEventAddActivity.electronicInvoiceBarcode"
     }
 
-    private val barcode: ElectronicInvoiceBarcodeDto? by lazy {
+    private val barcode: ElectronicInvoiceParcelableDto? by lazy {
         intent.getParcelableExtraCompat(INTENT_ELECTRONIC_INVOICE_BARCODE)
     }
 

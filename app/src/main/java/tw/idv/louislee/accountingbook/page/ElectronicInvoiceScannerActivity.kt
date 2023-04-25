@@ -27,7 +27,9 @@ import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.component.AppToolbarLayout
 import tw.idv.louislee.accountingbook.component.scanner.ElectronicInvoiceScanner
 import tw.idv.louislee.accountingbook.domain.Logger
-import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeDto
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
+import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceParcelableDto
+import tw.idv.louislee.accountingbook.dto.parcelable
 import tw.idv.louislee.accountingbook.extension.finish
 import tw.idv.louislee.accountingbook.extension.getParcelableExtraCompat
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
@@ -35,26 +37,22 @@ import tw.idv.louislee.accountingbook.theme.AppPreview
 
 @Composable
 fun rememberElectronicInvoiceScannerLauncher(
-    onScan: (ElectronicInvoiceBarcodeDto?) -> Unit,
+    onScan: (ElectronicInvoiceParcelableDto?) -> Unit,
     onFailed: () -> Unit = {}
-): ManagedActivityResultLauncher<Intent, ActivityResult> {
-    val context = LocalContext.current
-
-    return rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = {
-            if (it.resultCode == Activity.RESULT_OK) {
-                onScan(
-                    it.data?.getParcelableExtraCompat(
-                        ElectronicInvoiceScannerActivity.INTENT_BARCODE
-                    )
+): ManagedActivityResultLauncher<Intent, ActivityResult> = rememberLauncherForActivityResult(
+    contract = ActivityResultContracts.StartActivityForResult(),
+    onResult = {
+        if (it.resultCode == Activity.RESULT_OK) {
+            onScan(
+                it.data?.getParcelableExtraCompat(
+                    ElectronicInvoiceScannerActivity.INTENT_BARCODE
                 )
-            } else {
-                onFailed()
-            }
+            )
+        } else {
+            onFailed()
         }
-    )
-}
+    }
+)
 
 class ElectronicInvoiceScannerActivity : ComponentActivity() {
     companion object {
@@ -69,7 +67,7 @@ class ElectronicInvoiceScannerActivity : ComponentActivity() {
                 onScan = {
                     setResult(
                         RESULT_OK,
-                        Intent().apply { putExtra(INTENT_BARCODE, it) }
+                        Intent().apply { putExtra(INTENT_BARCODE, it.parcelable) }
                     )
                     finish()
                 }
@@ -79,7 +77,7 @@ class ElectronicInvoiceScannerActivity : ComponentActivity() {
 }
 
 @Composable
-private fun Content(logger: Logger, onScan: (barcode: ElectronicInvoiceBarcodeDto) -> Unit) {
+private fun Content(logger: Logger, onScan: (ElectronicInvoiceDto) -> Unit) {
     AccountingBookTheme {
         AppToolbarLayout(title = stringResource(id = R.string.electronic_invoice_scanner_title)) {
             var isPermissionDenied by remember {

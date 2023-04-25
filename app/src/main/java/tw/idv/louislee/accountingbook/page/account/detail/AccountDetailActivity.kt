@@ -36,7 +36,7 @@ import tw.idv.louislee.accountingbook.extension.finish
 import tw.idv.louislee.accountingbook.extension.titleId
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
-import tw.idv.louislee.accountingbook.utils.AppDateFormatterImpl
+import tw.idv.louislee.accountingbook.utils.AndroidAppDateFormatter
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import kotlin.math.absoluteValue
@@ -233,6 +233,6 @@ private fun Preview() {
                 ZoneId.systemDefault()
             )
         ),
-        dateFormatter = AppDateFormatterImpl(LocalContext.current)
+        dateFormatter = AndroidAppDateFormatter(LocalContext.current)
     )
 }

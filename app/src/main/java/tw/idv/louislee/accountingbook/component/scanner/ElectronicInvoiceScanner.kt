@@ -39,10 +39,13 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import tw.idv.louislee.accountingbook.AndroidLogger
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.domain.Logger
-import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeDto
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeEncoding
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
+import tw.idv.louislee.accountingbook.domain.utils.ElectronicInvoiceBarcodeParser
 import tw.idv.louislee.accountingbook.extension.finish
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
+import java.nio.charset.Charset
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -50,7 +53,7 @@ import java.time.format.DateTimeFormatter
 fun ElectronicInvoiceScanner(
     logger: Logger,
     onCameraPermissionDenied: () -> Unit,
-    onScan: (electronicInvoiceBarcode: ElectronicInvoiceBarcodeDto) -> Unit,
+    onScan: (ElectronicInvoiceDto) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
@@ -85,7 +88,7 @@ fun ElectronicInvoiceScanner(
 private fun Content(
     modifier: Modifier,
     logger: Logger,
-    onScan: (electronicInvoiceBarcode: ElectronicInvoiceBarcodeDto) -> Unit
+    onScan: (ElectronicInvoiceDto) -> Unit
 ) {
     AndroidView(
         modifier = modifier,
@@ -96,7 +99,7 @@ private fun Content(
 private fun createCameraView(
     logger: Logger,
     context: Context,
-    onScan: (electronicInvoiceBarcode: ElectronicInvoiceBarcodeDto) -> Unit
+    onScan: (ElectronicInvoiceDto) -> Unit
 ): View {
     val previewView = PreviewView(context).also {
         it.scaleType = PreviewView.ScaleType.FILL_CENTER
@@ -121,7 +124,7 @@ private fun createCameraView(
             return@MlKitAnalyzer
         }
 
-        val invoice = ElectronicInvoiceBarcodeParser.parse(barcodeResults)
+        val invoice = parseBarcodes(barcodeResults)
         if (invoice != null) {
             onScan(invoice)
         }
@@ -134,13 +137,60 @@ private fun createCameraView(
     return previewView
 }
 
+private fun parseBarcodes(barcodes: List<Barcode>): ElectronicInvoiceDto? {
+    if (barcodes.size != 2) {
+        return null
+    }
+
+    var leftBarcode: Barcode? = null
+    var rightBarcode: Barcode? = null
+    for (barcode in barcodes) {
+        if (barcode.rawValue?.startsWith("**") == true) {
+            rightBarcode = barcode
+        } else {
+            leftBarcode = barcode
+        }
+    }
+
+    if (leftBarcode == null || rightBarcode == null) {
+        return null
+    }
+
+    val encoding =
+        ElectronicInvoiceBarcodeParser.parseEncoding(leftBarcode = leftBarcode.displayValue ?: "")
+    val leftBarcodeRawText: String
+    val rightBarcodeRawText: String
+    when (encoding) {
+        ElectronicInvoiceBarcodeEncoding.BIG_5 -> {
+            leftBarcodeRawText = String(
+                leftBarcode.rawBytes ?: byteArrayOf(),
+                Charset.forName("BIG5")
+            )
+            rightBarcodeRawText = String(
+                rightBarcode.rawBytes ?: byteArrayOf(),
+                Charset.forName("BIG5")
+            )
+        }
+
+        else -> {
+            leftBarcodeRawText = leftBarcode.displayValue ?: ""
+            rightBarcodeRawText = rightBarcode.displayValue ?: ""
+        }
+    }
+    return ElectronicInvoiceBarcodeParser.parse(
+        leftBarcode = leftBarcodeRawText,
+        rightBarcode = rightBarcodeRawText,
+        encoding = encoding
+    )
+}
+
 @AppPreview
 @Composable
 private fun PreviewScanner() {
     AccountingBookTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             var electronicInvoiceBarcode by remember {
-                mutableStateOf<ElectronicInvoiceBarcodeDto?>(null)
+                mutableStateOf<ElectronicInvoiceDto?>(null)
             }
 
             if (electronicInvoiceBarcode == null) {
@@ -212,7 +262,7 @@ private fun PreviewScanner() {
                             ),
                             InvoiceRow(
                                 label = "營業人的補充資訊",
-                                content = electronicInvoiceBarcode!!.additionalInformation
+                                content = electronicInvoiceBarcode!!.additionalInformation ?: ""
                             ),
                         )
                         val productRows = electronicInvoiceBarcode!!.products
