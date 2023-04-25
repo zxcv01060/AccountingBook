@@ -8,10 +8,10 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.koin.core.annotation.Single
-import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventDetailDto
 import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventDto
 import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventFormDto
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEvent
 import tw.idv.louislee.accountingbook.domain.extension.dto
 import tw.idv.louislee.accountingbook.domain.extension.toDetail

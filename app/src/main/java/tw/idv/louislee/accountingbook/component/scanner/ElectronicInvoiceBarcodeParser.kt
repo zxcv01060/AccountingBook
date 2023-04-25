@@ -1,7 +1,7 @@
 package tw.idv.louislee.accountingbook.component.scanner
 
 import com.google.mlkit.vision.barcode.common.Barcode
-import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceBarcodeEncoding
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeEncoding
 import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceBarcodeDto
 import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceProductParcelableDto
 import java.nio.charset.Charset

@@ -4,7 +4,7 @@ import com.squareup.sqldelight.db.SqlDriver
 import org.koin.core.annotation.ComponentScan
 import org.koin.core.annotation.Module
 import org.koin.core.annotation.Single
-import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceBarcodeEncoding
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeEncoding
 import tw.idv.louislee.accountingbook.domain.entity.Account
 import tw.idv.louislee.accountingbook.domain.entity.AccountTypeAdapter
 import tw.idv.louislee.accountingbook.domain.entity.AccountingBookDatabase

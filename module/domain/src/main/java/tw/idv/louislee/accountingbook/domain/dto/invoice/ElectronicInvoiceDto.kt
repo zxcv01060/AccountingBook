@@ -1,4 +1,4 @@
-package tw.idv.louislee.accountingbook.domain.dto
+package tw.idv.louislee.accountingbook.domain.dto.invoice
 
 import java.time.LocalDate
 

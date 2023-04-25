@@ -2,9 +2,9 @@ package tw.idv.louislee.accountingbook.dto
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceBarcodeEncoding
-import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceDto
-import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceProductDto
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeEncoding
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceProductDto
 import java.time.LocalDate
 
 @Parcelize

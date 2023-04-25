@@ -1,6 +1,6 @@
 package tw.idv.louislee.accountingbook.domain.dto.accountingevent
 
-import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceDto
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
 import java.time.ZoneId
 import java.time.ZonedDateTime
