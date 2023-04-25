@@ -38,6 +38,7 @@ import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceBarcodeEncodin
 import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.dto.ElectronicInvoiceProductDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventType
+import tw.idv.louislee.accountingbook.domain.utils.AppDateFormatter
 import tw.idv.louislee.accountingbook.dto.parcelable
 import tw.idv.louislee.accountingbook.extension.finish
 import tw.idv.louislee.accountingbook.extension.startActivity
@@ -45,7 +46,6 @@ import tw.idv.louislee.accountingbook.extension.textId
 import tw.idv.louislee.accountingbook.page.accountingevent.edit.AccountingEventEditActivity
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
-import tw.idv.louislee.accountingbook.utils.AppDateFormatter
 import tw.idv.louislee.accountingbook.utils.AppDateFormatterImpl
 import java.time.LocalDate
 import java.time.ZoneId
