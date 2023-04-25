@@ -1,9 +1,12 @@
 package tw.idv.louislee.accountingbook.domain.utils
 
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeDto
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeEncoding
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceProductDto
+import java.nio.charset.StandardCharsets
 import java.time.LocalDate
+import java.util.Base64
 
 object ElectronicInvoiceBarcodeParser {
     fun parseEncoding(leftBarcode: String): ElectronicInvoiceBarcodeEncoding {
@@ -12,36 +15,32 @@ object ElectronicInvoiceBarcodeParser {
         return ElectronicInvoiceBarcodeEncoding.values()[encodingColumn.toInt()]
     }
 
-    fun parse(
-        leftBarcode: String,
-        rightBarcode: String,
-        encoding: ElectronicInvoiceBarcodeEncoding
-    ): ElectronicInvoiceDto {
-        val barcode = leftBarcode + rightBarcode.substring(2)
-
-        val invoiceNumber = barcode.substring(0, 10)
-        val date = parseTaiwaneseDate(barcode.substring(10, 17))
-        val randomCode = barcode.substring(17, 21)
-        val untaxedPrice = barcode.substring(21, 29)
+    fun parse(barcode: ElectronicInvoiceBarcodeDto): ElectronicInvoiceDto {
+        val invoiceNumber = barcode.rawText.substring(0, 10)
+        val date = parseTaiwaneseDate(barcode.rawText.substring(10, 17))
+        val randomCode = barcode.rawText.substring(17, 21)
+        val untaxedPrice = barcode.rawText.substring(21, 29)
             .takeIf { it != "00000000" }
             ?.toLong(radix = 16)
-        val price = barcode.substring(29, 37).toLong(radix = 16)
-        val buyerUnifiedBusinessNumber = barcode.substring(37, 45)
+        val price = barcode.rawText.substring(29, 37).toLong(radix = 16)
+        val buyerUnifiedBusinessNumber = barcode.rawText.substring(37, 45)
             .takeIf { it != "00000000" }
-        val sellerUnifiedBusinessNumber = barcode.substring(45, 53)
-        val verificationInformation = barcode.substring(53, 77)
+        val sellerUnifiedBusinessNumber = barcode.rawText.substring(45, 53)
+        val verificationInformation = barcode.rawText.substring(53, 77)
         // 這兩個中間會卡一個冒號，要跳過
-        val sellerCustomInformation = barcode.substring(78, 88).takeIf { it != "**********" }
+        val sellerCustomInformation =
+            barcode.rawText.substring(78, 88).takeIf { it != "**********" }
         // 這兩個中間會卡一個冒號，要跳過
-        val productColumns = barcode.substring(89).split(":")
+        val productColumns = barcode.rawText.substring(89)
+            .split(":")
         val qrCodeProductCount = productColumns[0].toInt()
         val invoiceProductCount = productColumns[1].toInt()
-        val products = parseProducts(productColumns)
+        val products = parseProducts(productColumns, barcode.encoding)
         val additionalInformation = productColumns.last()
 
         return ElectronicInvoiceDto(
-            leftBarcode = leftBarcode,
-            rightBarcode = rightBarcode,
+            leftBarcode = barcode.leftBarcode,
+            rightBarcode = barcode.rightBarcode,
             invoiceNumber = invoiceNumber,
             date = date,
             randomCode = randomCode,
@@ -53,19 +52,33 @@ object ElectronicInvoiceBarcodeParser {
             sellerCustomInformation = sellerCustomInformation,
             qrCodeProductCount = qrCodeProductCount,
             invoiceProductCount = invoiceProductCount,
-            encoding = encoding,
+            encoding = barcode.encoding,
             products = products,
             additionalInformation = additionalInformation,
         )
     }
 
+    private fun parseProducts(
+        productColumns: List<String>,
+        encoding: ElectronicInvoiceBarcodeEncoding
+    ): List<ElectronicInvoiceProductDto> {
+        val decodedProductColumns = if (encoding == ElectronicInvoiceBarcodeEncoding.BASE_64) {
+            val decodedProducts = Base64.getDecoder()
+                .decode(productColumns[productColumns.lastIndex])
+            String(decodedProducts, StandardCharsets.UTF_8).split(':')
+        } else {
+            // 略過前面三個，分別是qr code產品數、發票產品數、編碼
+            // 之後才是商品資訊
+            productColumns.subList(3, productColumns.size)
+        }
+
+        return parseProducts(decodedProductColumns)
+    }
+
     private fun parseProducts(barcodeColumns: List<String>): List<ElectronicInvoiceProductDto> {
-        // 略過前面三個，分別是qr code產品數、發票產品數、編碼
-        // 之後才是商品資訊
-        val productFirstIndex = 3
         val result = mutableListOf<ElectronicInvoiceProductDto>()
 
-        for (i in productFirstIndex until barcodeColumns.size step 3) {
+        for (i in barcodeColumns.indices step 3) {
             if (barcodeColumns.size - i < 3) {
                 break
             }

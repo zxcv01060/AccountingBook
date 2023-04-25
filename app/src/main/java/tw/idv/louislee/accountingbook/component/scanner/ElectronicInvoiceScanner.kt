@@ -39,6 +39,7 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import tw.idv.louislee.accountingbook.AndroidLogger
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.domain.Logger
+import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeDto
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeEncoding
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.utils.ElectronicInvoiceBarcodeParser
@@ -178,9 +179,11 @@ private fun parseBarcodes(barcodes: List<Barcode>): ElectronicInvoiceDto? {
         }
     }
     return ElectronicInvoiceBarcodeParser.parse(
-        leftBarcode = leftBarcodeRawText,
-        rightBarcode = rightBarcodeRawText,
-        encoding = encoding
+        ElectronicInvoiceBarcodeDto(
+            leftBarcode = leftBarcodeRawText,
+            rightBarcode = rightBarcodeRawText,
+            encoding = encoding
+        )
     )
 }
 
