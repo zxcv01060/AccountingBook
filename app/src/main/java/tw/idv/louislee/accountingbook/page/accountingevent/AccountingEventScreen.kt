@@ -64,57 +64,60 @@ fun AccountingEventScreen(events: List<AccountingEventDto>) {
             title = stringResource(id = R.string.accounting_event_list_title),
             actions = {
                 val context = LocalContext.current
-                var barcode by remember {
-                    mutableStateOf<ElectronicInvoiceBarcodeDto?>(null)
-                }
-                if (barcode != null) {
-                    context.startActivity<AccountingEventAddActivity> {
-                        putExtra(
-                            AccountingEventAddActivity.INTENT_ELECTRONIC_INVOICE_BARCODE,
-                            barcode
-                        )
-                    }
-                }
                 val electronicInvoiceBarcodeScannerLauncher = rememberLauncherForActivityResult(
                     contract = ActivityResultContracts.StartActivityForResult(),
                     onResult = {
-                        barcode = it.data?.getParcelableExtraCompat<ElectronicInvoiceBarcodeDto>(
-                            ElectronicInvoiceScannerActivity.INTENT_BARCODE
-                        )
+                        context.startActivity<AccountingEventAddActivity> {
+                            putExtra(
+                                AccountingEventAddActivity.INTENT_ELECTRONIC_INVOICE_BARCODE,
+                                it.data?.getParcelableExtraCompat<ElectronicInvoiceBarcodeDto>(
+                                    ElectronicInvoiceScannerActivity.INTENT_BARCODE
+                                )
+                            )
+                        }
                     }
                 )
-                var isExpanded by remember {
-                    mutableStateOf(false)
-                }
 
-                IconButton(onClick = { isExpanded = true }) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = stringResource(id = R.string.common_add)
+                AddAccountingEventButton(requestLaunchInvoiceScanner = {
+                    electronicInvoiceBarcodeScannerLauncher.launch(
+                        Intent(context, ElectronicInvoiceScannerActivity::class.java)
                     )
-                }
-                DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
-                    DropdownMenuItem(
-                        text = { Text("手動輸入") },
-                        onClick = {
-                            context.startActivity<AccountingEventAddActivity>()
-                            isExpanded = false
-                        }
-                    )
-                    DropdownMenuItem(
-                        text = { Text(text = "掃描發票") },
-                        onClick = {
-                            electronicInvoiceBarcodeScannerLauncher.launch(
-                                Intent(context, ElectronicInvoiceScannerActivity::class.java)
-                            )
-                            isExpanded = false
-                        }
-                    )
-                }
+                })
             }
         ) {
             AccountingEventList(events = events)
         }
+    }
+}
+
+@Composable
+private fun AddAccountingEventButton(requestLaunchInvoiceScanner: () -> Unit) {
+    val context = LocalContext.current
+    var isExpanded by remember {
+        mutableStateOf(false)
+    }
+
+    IconButton(onClick = { isExpanded = true }) {
+        Icon(
+            imageVector = Icons.Filled.Add,
+            contentDescription = stringResource(id = R.string.common_add)
+        )
+    }
+    DropdownMenu(expanded = isExpanded, onDismissRequest = { isExpanded = false }) {
+        DropdownMenuItem(
+            text = { Text("手動輸入") },
+            onClick = {
+                context.startActivity<AccountingEventAddActivity>()
+                isExpanded = false
+            }
+        )
+        DropdownMenuItem(
+            text = { Text(text = "掃描發票") },
+            onClick = {
+                requestLaunchInvoiceScanner()
+                isExpanded = false
+            }
+        )
     }
 }
 
