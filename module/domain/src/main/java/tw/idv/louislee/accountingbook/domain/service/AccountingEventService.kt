@@ -13,8 +13,8 @@ import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEvent
 import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventFormDto
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEvent
-import tw.idv.louislee.accountingbook.domain.extension.dto
 import tw.idv.louislee.accountingbook.domain.extension.toDetail
+import tw.idv.louislee.accountingbook.domain.extension.toDto
 import tw.idv.louislee.accountingbook.domain.repository.AccountingEventRepository
 import tw.idv.louislee.accountingbook.domain.repository.InvoiceProductRepository
 import tw.idv.louislee.accountingbook.domain.repository.InvoiceRepository
@@ -71,26 +71,7 @@ internal class AccountingEventServiceImpl(
                 context = context
             )
         ) { invoice, products ->
-            event.toDetail(invoice = invoice?.run {
-                ElectronicInvoiceDto(
-                    leftBarcode = leftBarcode,
-                    rightBarcode = rightBarcode,
-                    invoiceNumber = id,
-                    date = date,
-                    randomCode = randomCode,
-                    untaxedPrice = untaxedPrice,
-                    price = price,
-                    buyerUnifiedBusinessNumber = buyerUnifiedBusinessNumber,
-                    sellerUnifiedBusinessNumber = sellerUnifiedBusinessNumber,
-                    verificationInformation = verificationInformation,
-                    sellerCustomInformation = sellerCustomInformation,
-                    qrCodeProductCount = qrCodeProductCount.toInt(),
-                    invoiceProductCount = invoiceProductCount.toInt(),
-                    encoding = encoding,
-                    products = products.map { it.dto },
-                    additionalInformation = additionalInformation
-                )
-            })
+            event.toDetail(invoice = invoice?.toDto(products))
         }
 
     private fun eventMapper(event: AccountingEvent) = AccountingEventDto(
