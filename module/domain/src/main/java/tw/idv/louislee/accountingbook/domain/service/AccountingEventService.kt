@@ -74,8 +74,13 @@ internal class AccountingEventServiceImpl(
             event.toDetail(invoice = invoice?.toDto(products))
         }
 
-    override fun add(event: AccountingEventFormDto, electronicInvoice: ElectronicInvoiceDto?) =
-        repository.add(event, electronicInvoice)
+    override fun add(event: AccountingEventFormDto, electronicInvoice: ElectronicInvoiceDto?) {
+        if (electronicInvoice != null) {
+            invoiceRepository.add(electronicInvoice)
+        }
+
+        repository.add(event, electronicInvoice?.invoiceNumber)
+    }
 
     override fun delete(id: Long) = repository.delete(id = id)
 

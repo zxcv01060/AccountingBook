@@ -7,11 +7,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Single
 import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventFormDto
-import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.entity.AccountQueries
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEvent
 import tw.idv.louislee.accountingbook.domain.entity.AccountingEventQueries
-import tw.idv.louislee.accountingbook.domain.entity.Invoice
 import tw.idv.louislee.accountingbook.domain.entity.InvoiceProductQueries
 import tw.idv.louislee.accountingbook.domain.entity.InvoiceQueries
 import tw.idv.louislee.accountingbook.domain.utils.DateTimeProvider
@@ -27,7 +25,7 @@ internal interface AccountingEventRepository {
         context: CoroutineContext = Dispatchers.Default
     ): Flow<List<AccountingEvent>>
 
-    fun add(event: AccountingEventFormDto, electronicInvoice: ElectronicInvoiceDto?)
+    fun add(event: AccountingEventFormDto, invoiceNumber: String?)
 
     fun delete(id: Long)
 
@@ -59,7 +57,7 @@ internal class AccountingEventRepositoryImpl(
         .asFlow()
         .mapToList(context)
 
-    override fun add(event: AccountingEventFormDto, electronicInvoice: ElectronicInvoiceDto?) =
+    override fun add(event: AccountingEventFormDto, invoiceNumber: String?) =
         query.transaction {
             val price = if (event.type.isIncome) {
                 event.price
@@ -69,39 +67,9 @@ internal class AccountingEventRepositoryImpl(
             val newBalance =
                 updateAccountBalance(accountId = event.accountId, balanceInterval = price)
 
-            if (electronicInvoice != null) {
-                invoiceQuery.add(
-                    Invoice(
-                        id = electronicInvoice.invoiceNumber,
-                        date = electronicInvoice.date,
-                        randomCode = electronicInvoice.randomCode,
-                        untaxedPrice = electronicInvoice.untaxedPrice,
-                        price = electronicInvoice.price,
-                        buyerUnifiedBusinessNumber = electronicInvoice.buyerUnifiedBusinessNumber,
-                        sellerUnifiedBusinessNumber = electronicInvoice.sellerUnifiedBusinessNumber,
-                        verificationInformation = electronicInvoice.verificationInformation,
-                        sellerCustomInformation = electronicInvoice.sellerCustomInformation,
-                        qrCodeProductCount = electronicInvoice.qrCodeProductCount.toLong(),
-                        invoiceProductCount = electronicInvoice.invoiceProductCount.toLong(),
-                        encoding = electronicInvoice.encoding,
-                        additionalInformation = electronicInvoice.additionalInformation,
-                        leftBarcode = electronicInvoice.leftBarcode,
-                        rightBarcode = electronicInvoice.rightBarcode,
-                        createDate = dateTimeProvider.now,
-                    )
-                )
-                for (product in electronicInvoice.products) {
-                    invoiceProductQuery.add(
-                        invoiceId = electronicInvoice.invoiceNumber,
-                        name = product.name,
-                        unitPrice = product.unitPrice,
-                        count = product.count
-                    )
-                }
-            }
             query.add(
                 accountId = event.accountId,
-                invoiceId = electronicInvoice?.invoiceNumber,
+                invoiceId = invoiceNumber,
                 type = event.type,
                 isIncome = event.type.isIncome,
                 price = price,
