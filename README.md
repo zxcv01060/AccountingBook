@@ -5,7 +5,7 @@
 
 * 電腦：Macbook M1 Pro
 * IDE：[Android Studio](https://developer.android.com/studio)
-* 程式語言：[Kotlin](https://kotlinlang.org/) 1.8.10(JDK 17)
+* 程式語言：[Kotlin](https://kotlinlang.org/) 1.8.20(JDK 17)
 * 主要套件：[Jetpack Compose](https://developer.android.com/jetpack/compose?hl=zh-tw)
 * 樣式套件：[Material 3](https://m3.material.io/)
 * 資料庫ORM套件：[SQL Delight](https://github.com/cashapp/sqldelight)
