@@ -1,5 +1,6 @@
 package tw.idv.louislee.accountingbook.domain.utils
 
+import org.koin.core.annotation.Factory
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeDto
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeEncoding
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
@@ -8,14 +9,25 @@ import java.nio.charset.StandardCharsets
 import java.time.LocalDate
 import java.util.Base64
 
-object ElectronicInvoiceBarcodeParser {
-    fun parseEncoding(leftBarcode: String): ElectronicInvoiceBarcodeEncoding {
+interface ElectronicInvoiceBarcodeParser {
+    companion object {
+        val default: ElectronicInvoiceBarcodeParser get() = ElectronicInvoiceBarcodeParserImpl()
+    }
+
+    fun parseEncoding(leftBarcode: String): ElectronicInvoiceBarcodeEncoding
+
+    fun parse(barcode: ElectronicInvoiceBarcodeDto): ElectronicInvoiceDto
+}
+
+@Factory
+internal class ElectronicInvoiceBarcodeParserImpl : ElectronicInvoiceBarcodeParser {
+    override fun parseEncoding(leftBarcode: String): ElectronicInvoiceBarcodeEncoding {
         val encodingColumn = leftBarcode.split(':')[4]
 
         return ElectronicInvoiceBarcodeEncoding.values()[encodingColumn.toInt()]
     }
 
-    fun parse(barcode: ElectronicInvoiceBarcodeDto): ElectronicInvoiceDto {
+    override fun parse(barcode: ElectronicInvoiceBarcodeDto): ElectronicInvoiceDto {
         val invoiceNumber = barcode.rawText.substring(0, 10)
         val date = parseTaiwaneseDate(barcode.rawText.substring(10, 17))
         val randomCode = barcode.rawText.substring(17, 21)

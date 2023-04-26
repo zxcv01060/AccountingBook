@@ -53,6 +53,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ElectronicInvoiceScanner(
     logger: Logger,
+    electronicInvoiceParser: ElectronicInvoiceBarcodeParser,
     onCameraPermissionDenied: () -> Unit,
     onScan: (ElectronicInvoiceDto) -> Unit,
     modifier: Modifier = Modifier
@@ -60,7 +61,12 @@ fun ElectronicInvoiceScanner(
     val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
 
     if (cameraPermissionState.status.isGranted) {
-        Content(modifier = modifier, logger = logger, onScan = onScan)
+        Content(
+            modifier = modifier,
+            logger = logger,
+            electronicInvoiceParser = electronicInvoiceParser,
+            onScan = onScan
+        )
         return
     }
 
@@ -89,17 +95,19 @@ fun ElectronicInvoiceScanner(
 private fun Content(
     modifier: Modifier,
     logger: Logger,
+    electronicInvoiceParser: ElectronicInvoiceBarcodeParser,
     onScan: (ElectronicInvoiceDto) -> Unit
 ) {
     AndroidView(
         modifier = modifier,
-        factory = { createCameraView(logger, it, onScan) }
+        factory = { createCameraView(logger, it, electronicInvoiceParser, onScan) }
     )
 }
 
 private fun createCameraView(
     logger: Logger,
     context: Context,
+    electronicInvoiceParser: ElectronicInvoiceBarcodeParser,
     onScan: (ElectronicInvoiceDto) -> Unit
 ): View {
     val previewView = PreviewView(context).also {
@@ -125,7 +133,7 @@ private fun createCameraView(
             return@MlKitAnalyzer
         }
 
-        val invoice = parseBarcodes(barcodeResults)
+        val invoice = parseBarcodes(barcodeResults, electronicInvoiceParser)
         if (invoice != null) {
             onScan(invoice)
         }
@@ -138,7 +146,10 @@ private fun createCameraView(
     return previewView
 }
 
-private fun parseBarcodes(barcodes: List<Barcode>): ElectronicInvoiceDto? {
+private fun parseBarcodes(
+    barcodes: List<Barcode>,
+    electronicInvoiceParser: ElectronicInvoiceBarcodeParser
+): ElectronicInvoiceDto? {
     if (barcodes.size != 2) {
         return null
     }
@@ -158,7 +169,7 @@ private fun parseBarcodes(barcodes: List<Barcode>): ElectronicInvoiceDto? {
     }
 
     val encoding =
-        ElectronicInvoiceBarcodeParser.parseEncoding(leftBarcode = leftBarcode.displayValue ?: "")
+        electronicInvoiceParser.parseEncoding(leftBarcode = leftBarcode.displayValue ?: "")
     val leftBarcodeRawText: String
     val rightBarcodeRawText: String
     when (encoding) {
@@ -178,7 +189,7 @@ private fun parseBarcodes(barcodes: List<Barcode>): ElectronicInvoiceDto? {
             rightBarcodeRawText = rightBarcode.displayValue ?: ""
         }
     }
-    return ElectronicInvoiceBarcodeParser.parse(
+    return electronicInvoiceParser.parse(
         ElectronicInvoiceBarcodeDto(
             leftBarcode = leftBarcodeRawText,
             rightBarcode = rightBarcodeRawText,
@@ -199,6 +210,7 @@ private fun PreviewScanner() {
             if (electronicInvoiceBarcode == null) {
                 ElectronicInvoiceScanner(
                     logger = AndroidLogger(),
+                    electronicInvoiceParser = ElectronicInvoiceBarcodeParser.default,
                     onCameraPermissionDenied = {},
                     onScan = { electronicInvoiceBarcode = it }
                 )
@@ -308,7 +320,6 @@ private fun PreviewScanner() {
                     }
                 )
             }
-
         }
     }
 }

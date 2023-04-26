@@ -28,6 +28,7 @@ import tw.idv.louislee.accountingbook.component.AppToolbarLayout
 import tw.idv.louislee.accountingbook.component.scanner.ElectronicInvoiceScanner
 import tw.idv.louislee.accountingbook.domain.Logger
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
+import tw.idv.louislee.accountingbook.domain.utils.ElectronicInvoiceBarcodeParser
 import tw.idv.louislee.accountingbook.dto.ElectronicInvoiceParcelableDto
 import tw.idv.louislee.accountingbook.dto.parcelable
 import tw.idv.louislee.accountingbook.extension.finish
@@ -64,6 +65,7 @@ class ElectronicInvoiceScannerActivity : ComponentActivity() {
         setContent {
             Content(
                 logger = get(),
+                electronicInvoiceParser = get(),
                 onScan = {
                     setResult(
                         RESULT_OK,
@@ -77,7 +79,11 @@ class ElectronicInvoiceScannerActivity : ComponentActivity() {
 }
 
 @Composable
-private fun Content(logger: Logger, onScan: (ElectronicInvoiceDto) -> Unit) {
+private fun Content(
+    logger: Logger,
+    electronicInvoiceParser: ElectronicInvoiceBarcodeParser,
+    onScan: (ElectronicInvoiceDto) -> Unit
+) {
     AccountingBookTheme {
         AppToolbarLayout(title = stringResource(id = R.string.electronic_invoice_scanner_title)) {
             var isPermissionDenied by remember {
@@ -91,6 +97,7 @@ private fun Content(logger: Logger, onScan: (ElectronicInvoiceDto) -> Unit) {
             ElectronicInvoiceScanner(
                 modifier = Modifier.fillMaxSize(),
                 logger = logger,
+                electronicInvoiceParser = electronicInvoiceParser,
                 onCameraPermissionDenied = { isPermissionDenied = true },
                 onScan = onScan
             )
@@ -117,5 +124,9 @@ private fun NoCameraPermissionDialog() {
 @AppPreview
 @Composable
 private fun Preview() {
-    Content(logger = AndroidLogger(), onScan = {})
+    Content(
+        logger = AndroidLogger(),
+        electronicInvoiceParser = ElectronicInvoiceBarcodeParser.default,
+        onScan = {}
+    )
 }
