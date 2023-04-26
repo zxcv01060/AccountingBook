@@ -1,4 +1,4 @@
-package tw.idv.louislee.accountingbook
+package tw.idv.louislee.accountingbook.page
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
@@ -7,6 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import tw.idv.louislee.accountingbook.R
 
 enum class AppScreen(
     val route: String,
