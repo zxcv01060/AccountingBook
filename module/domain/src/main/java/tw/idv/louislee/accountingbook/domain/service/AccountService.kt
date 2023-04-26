@@ -16,8 +16,6 @@ import tw.idv.louislee.accountingbook.domain.extension.toDetail
 import tw.idv.louislee.accountingbook.domain.extension.toDto
 import tw.idv.louislee.accountingbook.domain.repository.AccountRepository
 import tw.idv.louislee.accountingbook.domain.repository.AccountingEventRepository
-import tw.idv.louislee.accountingbook.domain.repository.InvoiceProductRepository
-import tw.idv.louislee.accountingbook.domain.repository.InvoiceRepository
 import kotlin.coroutines.CoroutineContext
 
 interface AccountService {
@@ -31,9 +29,7 @@ interface AccountService {
 @Single
 internal class AccountServiceImpl(
     private val repository: AccountRepository,
-    private val accountingEventRepository: AccountingEventRepository,
-    private val invoiceRepository: InvoiceRepository,
-    private val invoiceProductRepository: InvoiceProductRepository
+    private val accountingEventRepository: AccountingEventRepository
 ) : AccountService {
     override fun findAll(context: CoroutineContext): Flow<List<AccountDto>> =
         repository.findAll(context)
