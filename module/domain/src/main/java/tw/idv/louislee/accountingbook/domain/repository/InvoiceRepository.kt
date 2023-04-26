@@ -5,6 +5,7 @@ import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.annotation.Single
+import tw.idv.louislee.accountingbook.domain.Logger
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.entity.Invoice
 import tw.idv.louislee.accountingbook.domain.entity.InvoiceProductQueries
@@ -23,6 +24,7 @@ internal interface InvoiceRepository {
 
 @Single
 internal class InvoiceRepositoryImpl(
+    private val logger: Logger,
     private val dateTimeProvider: DateTimeProvider,
     private val query: InvoiceQueries,
     private val productQuery: InvoiceProductQueries
@@ -33,6 +35,14 @@ internal class InvoiceRepositoryImpl(
             .mapToOneOrNull(context)
 
     override fun add(electronicInvoice: ElectronicInvoiceDto) = query.transaction {
+        val invoice = query.findById(id = electronicInvoice.invoiceNumber)
+            .executeAsOneOrNull()
+        if (invoice != null) {
+            logger.warn("發票已存在，略過更新")
+
+            return@transaction
+        }
+
         query.add(
             Invoice(
                 id = electronicInvoice.invoiceNumber,
