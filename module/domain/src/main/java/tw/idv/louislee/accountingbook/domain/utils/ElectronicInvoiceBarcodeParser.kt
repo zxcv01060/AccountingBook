@@ -9,41 +9,33 @@ import java.nio.charset.StandardCharsets
 import java.time.LocalDate
 import java.util.Base64
 
-interface ElectronicInvoiceBarcodeParser {
+fun interface ElectronicInvoiceBarcodeParser {
     companion object {
         val default: ElectronicInvoiceBarcodeParser get() = ElectronicInvoiceBarcodeParserImpl()
     }
-
-    fun parseEncoding(leftBarcode: String): ElectronicInvoiceBarcodeEncoding
 
     fun parse(barcode: ElectronicInvoiceBarcodeDto): ElectronicInvoiceDto
 }
 
 @Factory
 internal class ElectronicInvoiceBarcodeParserImpl : ElectronicInvoiceBarcodeParser {
-    override fun parseEncoding(leftBarcode: String): ElectronicInvoiceBarcodeEncoding {
-        val encodingColumn = leftBarcode.split(':')[4]
-
-        return ElectronicInvoiceBarcodeEncoding.values()[encodingColumn.toInt()]
-    }
-
     override fun parse(barcode: ElectronicInvoiceBarcodeDto): ElectronicInvoiceDto {
-        val invoiceNumber = barcode.rawText.substring(0, 10)
-        val date = parseTaiwaneseDate(barcode.rawText.substring(10, 17))
-        val randomCode = barcode.rawText.substring(17, 21)
-        val untaxedPrice = barcode.rawText.substring(21, 29)
+        val invoiceNumber = barcode.barcodeText.substring(0, 10)
+        val date = parseTaiwaneseDate(barcode.barcodeText.substring(10, 17))
+        val randomCode = barcode.barcodeText.substring(17, 21)
+        val untaxedPrice = barcode.barcodeText.substring(21, 29)
             .takeIf { it != "00000000" }
             ?.toLong(radix = 16)
-        val price = barcode.rawText.substring(29, 37).toLong(radix = 16)
-        val buyerUnifiedBusinessNumber = barcode.rawText.substring(37, 45)
+        val price = barcode.barcodeText.substring(29, 37).toLong(radix = 16)
+        val buyerUnifiedBusinessNumber = barcode.barcodeText.substring(37, 45)
             .takeIf { it != "00000000" }
-        val sellerUnifiedBusinessNumber = barcode.rawText.substring(45, 53)
-        val verificationInformation = barcode.rawText.substring(53, 77)
+        val sellerUnifiedBusinessNumber = barcode.barcodeText.substring(45, 53)
+        val verificationInformation = barcode.barcodeText.substring(53, 77)
         // 這兩個中間會卡一個冒號，要跳過
         val sellerCustomInformation =
-            barcode.rawText.substring(78, 88).takeIf { it != "**********" }
+            barcode.barcodeText.substring(78, 88).takeIf { it != "**********" }
         // 這兩個中間會卡一個冒號，要跳過
-        val productColumns = barcode.rawText.substring(89)
+        val productColumns = barcode.barcodeText.substring(89)
             .split(":")
         val qrCodeProductCount = productColumns[0].toInt()
         val invoiceProductCount = productColumns[1].toInt()
@@ -51,8 +43,8 @@ internal class ElectronicInvoiceBarcodeParserImpl : ElectronicInvoiceBarcodePars
         val additionalInformation = productColumns.last()
 
         return ElectronicInvoiceDto(
-            leftBarcode = barcode.leftBarcode,
-            rightBarcode = barcode.rightBarcode,
+            leftBarcode = barcode.leftBarcodeText,
+            rightBarcode = barcode.rightBarcodeText,
             invoiceNumber = invoiceNumber,
             date = date,
             randomCode = randomCode,

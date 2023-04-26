@@ -40,13 +40,11 @@ import tw.idv.louislee.accountingbook.AndroidLogger
 import tw.idv.louislee.accountingbook.R
 import tw.idv.louislee.accountingbook.domain.Logger
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeDto
-import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceBarcodeEncoding
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
 import tw.idv.louislee.accountingbook.domain.utils.ElectronicInvoiceBarcodeParser
 import tw.idv.louislee.accountingbook.extension.finish
 import tw.idv.louislee.accountingbook.theme.AccountingBookTheme
 import tw.idv.louislee.accountingbook.theme.AppPreview
-import java.nio.charset.Charset
 import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -168,32 +166,10 @@ private fun parseBarcodes(
         return null
     }
 
-    val encoding =
-        electronicInvoiceParser.parseEncoding(leftBarcode = leftBarcode.displayValue ?: "")
-    val leftBarcodeRawText: String
-    val rightBarcodeRawText: String
-    when (encoding) {
-        ElectronicInvoiceBarcodeEncoding.BIG_5 -> {
-            leftBarcodeRawText = String(
-                leftBarcode.rawBytes ?: byteArrayOf(),
-                Charset.forName("BIG5")
-            )
-            rightBarcodeRawText = String(
-                rightBarcode.rawBytes ?: byteArrayOf(),
-                Charset.forName("BIG5")
-            )
-        }
-
-        else -> {
-            leftBarcodeRawText = leftBarcode.displayValue ?: ""
-            rightBarcodeRawText = rightBarcode.displayValue ?: ""
-        }
-    }
     return electronicInvoiceParser.parse(
         ElectronicInvoiceBarcodeDto(
-            leftBarcode = leftBarcodeRawText,
-            rightBarcode = rightBarcodeRawText,
-            encoding = encoding
+            leftBarcode = leftBarcode.rawBytes ?: byteArrayOf(),
+            rightBarcode = rightBarcode.rawBytes ?: byteArrayOf()
         )
     )
 }
