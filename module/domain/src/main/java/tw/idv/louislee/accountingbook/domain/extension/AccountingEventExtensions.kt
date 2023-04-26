@@ -1,5 +1,6 @@
 package tw.idv.louislee.accountingbook.domain.extension
 
+import tw.idv.louislee.accountingbook.domain.dto.account.AccountAccountingEventItemDto
 import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventDetailDto
 import tw.idv.louislee.accountingbook.domain.dto.accountingevent.AccountingEventDto
 import tw.idv.louislee.accountingbook.domain.dto.invoice.ElectronicInvoiceDto
@@ -22,4 +23,11 @@ fun AccountingEvent.toDetail(invoice: ElectronicInvoiceDto?) = AccountingEventDe
     recordDate = recordDate,
     createDate = createDate,
     lastUpdateDate = lastUpdateDate
+)
+
+fun AccountingEvent.toAccountItem() = AccountAccountingEventItemDto(
+    id = id,
+    price = price,
+    note = note,
+    recordDate = recordDate
 )

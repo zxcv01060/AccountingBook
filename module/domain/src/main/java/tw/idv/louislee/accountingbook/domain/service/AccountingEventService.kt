@@ -43,7 +43,7 @@ internal class AccountingEventServiceImpl(
 ) : AccountingEventService {
     override fun findAll(context: CoroutineContext): Flow<List<AccountingEventDto>> =
         repository.findAll(context)
-            .map { it.map(::eventMapper) }
+            .map { events -> events.map { it.toDto() } }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun findById(id: Long, context: CoroutineContext): Flow<AccountingEventDetailDto?> =
@@ -74,17 +74,11 @@ internal class AccountingEventServiceImpl(
             event.toDetail(invoice = invoice?.toDto(products))
         }
 
-    private fun eventMapper(event: AccountingEvent) = AccountingEventDto(
-        id = event.id,
-        type = event.type,
-        price = event.price,
-        note = event.note
-    )
-
     override fun add(event: AccountingEventFormDto, electronicInvoice: ElectronicInvoiceDto?) =
         repository.add(event, electronicInvoice)
 
     override fun delete(id: Long) = repository.delete(id = id)
+
     override fun updateById(id: Long, event: AccountingEventFormDto) =
         repository.updateById(id = id, event = event)
 }

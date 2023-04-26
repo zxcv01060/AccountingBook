@@ -11,7 +11,9 @@ import tw.idv.louislee.accountingbook.domain.dto.account.AccountAccountingEventI
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDetailDto
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountDto
 import tw.idv.louislee.accountingbook.domain.dto.account.AccountFormDto
-import tw.idv.louislee.accountingbook.domain.entity.Account
+import tw.idv.louislee.accountingbook.domain.extension.toAccountItem
+import tw.idv.louislee.accountingbook.domain.extension.toDetail
+import tw.idv.louislee.accountingbook.domain.extension.toDto
 import tw.idv.louislee.accountingbook.domain.repository.AccountRepository
 import tw.idv.louislee.accountingbook.domain.repository.AccountingEventRepository
 import tw.idv.louislee.accountingbook.domain.repository.InvoiceProductRepository
@@ -35,33 +37,14 @@ internal class AccountServiceImpl(
 ) : AccountService {
     override fun findAll(context: CoroutineContext): Flow<List<AccountDto>> =
         repository.findAll(context)
-            .map { it.map(::accountMapper) }
-
-    private fun accountMapper(account: Account): AccountDto = AccountDto(
-        id = account.id,
-        type = account.type,
-        name = account.name,
-        balance = account.balance
-    )
+            .map { accounts -> accounts.map { it.toDto() } }
 
     override fun findById(id: Long, context: CoroutineContext): Flow<AccountDetailDto?> =
         repository.findById(id = id, context = context)
             .combine(
                 findAccountingEventDetails(id = id, context = context)
             ) { account, accountingEvents ->
-                if (account == null) {
-                    return@combine null
-                }
-
-                return@combine AccountDetailDto(
-                    id = account.id,
-                    name = account.name,
-                    type = account.type,
-                    balance = account.balance,
-                    createDate = account.createDate,
-                    lastUpdateDate = account.lastUpdateDate,
-                    accountingEvents = accountingEvents
-                )
+                account?.toDetail(accountingEvents)
             }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -71,14 +54,7 @@ internal class AccountServiceImpl(
     ): Flow<List<AccountAccountingEventItemDto>> {
         return accountingEventRepository.findByAccountId(accountId = id, context = context)
             .mapLatest { events ->
-                events.map {
-                    AccountAccountingEventItemDto(
-                        id = it.id,
-                        price = it.price,
-                        note = it.note,
-                        recordDate = it.recordDate
-                    )
-                }
+                events.map { it.toAccountItem() }
             }
     }
 
